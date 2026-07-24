@@ -3,68 +3,62 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Flora Creative Studio — ценовое предложение</title>
+<title>Flora Creative Studio — видеосъёмка музыкального клипа</title>
 <style>
   *,*::before,*::after{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
 
   :root{
     --bg:#0E0D12; --bg-2:#141219; --panel:#17151F; --card:#1A1824;
-    --text:#EBE7DE; --soft:#C6C0B4; --muted:#8F8878; --faint:#6A6558;
+    --text:#EBE7DE; --soft:#C4BEB2; --muted:#8E8777; --faint:#6A6558;
     --line:#272430; --line-2:#34313E;
     --amber:#E3AA52; --amber-2:#C98F45;
     --serif:"Iowan Old Style","Palatino Linotype",Palatino,"Book Antiqua",Georgia,ui-serif,serif;
     --sans:"Segoe UI",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
-    --mono:"Cascadia Mono","Consolas",ui-monospace,SFMono-Regular,monospace;
   }
 
   body{background:var(--bg);color:var(--text);font-family:var(--sans);
-    line-height:1.62;font-size:17px;-webkit-font-smoothing:antialiased;
+    line-height:1.6;font-size:16.5px;-webkit-font-smoothing:antialiased;
     background-image:radial-gradient(140% 55% at 50% -6%,rgba(227,170,82,.09),transparent 55%);
     background-repeat:no-repeat;}
   .col{max-width:700px;margin:0 auto;padding:0 26px;}
-  h1,h2,h3{font-family:var(--serif);font-weight:600;line-height:1.16;text-wrap:balance;margin:0;}
+  h1,h2{font-family:var(--serif);font-weight:600;line-height:1.16;text-wrap:balance;margin:0;}
   p{margin:0;}
   a{color:inherit;}
-  .k{color:var(--amber);font-weight:600;white-space:nowrap;}
+  .num{font-variant-numeric:tabular-nums;}
+  .ambernum{color:var(--amber);font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap;}
 
   /* ---------- HEADER ---------- */
-  .top{text-align:center;padding:66px 26px 44px;position:relative;}
-  .brandline{display:inline-flex;align-items:center;gap:11px;
-    font-size:11.5px;letter-spacing:.26em;text-transform:uppercase;color:var(--muted);}
-  .ring{width:16px;height:16px;flex:none;}
-  .ring circle{fill:none;stroke:var(--amber);stroke-width:1.4;}
-  .ring path{stroke:var(--amber);stroke-width:1.4;}
-  .top h1{font-size:clamp(34px,6.4vw,50px);margin:26px 0 0;letter-spacing:.3px;}
-  .top .subtitle{font-family:var(--serif);font-style:italic;font-size:clamp(19px,3vw,23px);
-    color:var(--amber);margin-top:12px;}
-  .top .tagline{margin-top:16px;font-size:13.5px;letter-spacing:.05em;color:var(--muted);}
-  .rule{width:min(560px,86%);height:1px;margin:40px auto 0;
+  .top{text-align:center;padding:60px 26px 40px;}
+  .mark{width:46px;height:46px;color:var(--amber);display:inline-block;}
+  .brand{margin-top:16px;font-size:11.5px;letter-spacing:.28em;text-transform:uppercase;color:var(--muted);}
+  .top h1{font-size:clamp(30px,5.6vw,44px);margin:20px 0 0;letter-spacing:.3px;}
+  .top .tagline{margin-top:16px;font-size:12.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--amber);}
+  .rule{width:min(540px,84%);height:1px;margin:38px auto 0;
     background:linear-gradient(90deg,transparent,var(--line-2),transparent);}
 
   /* ---------- SECTIONS ---------- */
-  section{padding:46px 0;}
-  .sh{display:flex;align-items:baseline;gap:14px;}
-  .snum{font-family:var(--serif);color:var(--amber);font-size:22px;line-height:1;
-    font-variant-numeric:tabular-nums;}
-  .sh h2{font-size:clamp(23px,4vw,29px);letter-spacing:.2px;}
+  section{padding:44px 0;}
+  .sh{display:flex;align-items:baseline;gap:16px;
+    font-family:var(--serif);font-weight:600;font-size:clamp(22px,3.4vw,27px);line-height:1.15;}
+  .sh .snum{color:var(--amber);}
+  .sh h2{font-size:inherit;font-weight:inherit;}
   .lead{margin-top:16px;color:var(--soft);}
   .lead+.lead{margin-top:12px;}
 
   /* price table */
-  .ptable{margin-top:24px;border:1px solid var(--line);border-radius:14px;overflow:hidden;}
+  .ptable{margin-top:22px;border:1px solid var(--line);border-radius:14px;overflow:hidden;}
   .prow{display:flex;justify-content:space-between;align-items:baseline;gap:16px;
     padding:16px 20px;border-top:1px solid var(--line);background:var(--card);}
   .prow:first-child{border-top:none;}
   .prow .pn{color:var(--text);}
   .prow .pn small{display:block;color:var(--muted);font-size:13px;margin-top:2px;}
-  .prow .pp{font-family:var(--mono);color:var(--amber);white-space:nowrap;font-weight:600;
-    font-variant-numeric:tabular-nums;font-size:15px;}
+  .prow .pp{color:var(--amber);font-weight:700;white-space:nowrap;font-variant-numeric:tabular-nums;font-size:15px;}
 
-  .notes{list-style:none;margin:18px 0 0;padding:0;display:flex;flex-direction:column;gap:12px;}
-  .notes li{position:relative;padding-left:22px;color:var(--soft);font-size:15px;}
-  .notes li::before{content:"";position:absolute;left:2px;top:.62em;width:7px;height:7px;
-    border-radius:50%;background:var(--amber);box-shadow:0 0 10px rgba(227,170,82,.45);}
+  .notes{list-style:none;margin:18px 0 0;padding:0;display:flex;flex-direction:column;gap:11px;}
+  .notes li{position:relative;padding-left:22px;color:var(--soft);font-size:14.5px;}
+  .notes li::before{content:"";position:absolute;left:2px;top:.6em;width:7px;height:7px;
+    border-radius:50%;background:var(--amber);box-shadow:0 0 9px rgba(227,170,82,.45);}
   .notes li b{color:var(--text);font-weight:600;}
 
   /* scenario tiers */
@@ -72,18 +66,18 @@
   .tier{border:1px solid var(--line);border-radius:14px;padding:18px 20px;background:var(--card);}
   .tier .th{display:flex;justify-content:space-between;align-items:baseline;gap:14px;}
   .tier .tname{font-family:var(--serif);font-size:19px;}
-  .tier .tprice{font-family:var(--mono);font-weight:700;color:var(--amber);font-variant-numeric:tabular-nums;}
+  .tier .tprice{color:var(--amber);font-weight:700;font-variant-numeric:tabular-nums;}
   .tier p{color:var(--soft);font-size:14.5px;margin-top:8px;}
 
   /* callout */
-  .callout{margin-top:22px;border:1px solid var(--line-2);border-left:3px solid var(--amber);
-    border-radius:12px;padding:20px 22px;background:linear-gradient(180deg,var(--card),var(--panel));}
-  .callout .big{font-family:var(--mono);font-size:24px;font-weight:700;color:var(--amber);
-    font-variant-numeric:tabular-nums;text-shadow:0 0 24px rgba(227,170,82,.35);}
-  .callout .lbl{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;}
+  .callout{margin-top:20px;border:1px solid var(--line-2);border-left:3px solid var(--amber);
+    border-radius:12px;padding:18px 22px;background:linear-gradient(180deg,var(--card),var(--panel));}
+  .callout .lbl{font-size:11.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;}
+  .callout .big{font-family:var(--serif);font-size:26px;font-weight:600;color:var(--amber);
+    font-variant-numeric:tabular-nums;}
 
   /* ---------- constructor ---------- */
-  .calc{margin-top:24px;background:linear-gradient(180deg,var(--card),var(--panel));
+  .calc{margin-top:22px;background:linear-gradient(180deg,var(--card),var(--panel));
     border:1px solid var(--line-2);border-radius:18px;padding:8px 24px 24px;
     box-shadow:0 24px 60px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.03);}
   .crow{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;
@@ -93,14 +87,12 @@
   .crow .cl .t{font-weight:600;font-size:15.5px;}
   .crow .cl .s{color:var(--muted);font-size:13px;margin-top:3px;}
   .crow .ctrl{display:flex;align-items:center;gap:11px;}
-  .cprice{font-family:var(--mono);font-variant-numeric:tabular-nums;font-size:14px;
-    min-width:54px;text-align:right;color:var(--faint);}
-  .cprice.on{color:var(--amber);}
-  .cprice.info{color:var(--muted);font-size:13px;}
+  .cprice{font-variant-numeric:tabular-nums;font-size:14px;min-width:52px;text-align:right;color:var(--faint);}
+  .cprice.on{color:var(--amber);font-weight:600;}
+  .cprice.info{color:var(--muted);font-size:13px;font-weight:400;}
 
-  /* segmented (light) */
   .seg{display:inline-flex;border:1px solid var(--line-2);border-radius:10px;overflow:hidden;background:#221F2B;}
-  .seg label{cursor:pointer;font-size:13px;padding:8px 12px;color:var(--muted);white-space:nowrap;
+  .seg label{cursor:pointer;font-size:12.5px;padding:8px 12px;color:var(--muted);white-space:nowrap;
     display:flex;align-items:center;transition:background .15s ease,color .15s ease;}
   .seg label+label{border-left:1px solid var(--line-2);}
   .seg input{position:absolute;opacity:0;pointer-events:none;}
@@ -132,19 +124,17 @@
   .total{display:flex;align-items:baseline;justify-content:space-between;gap:14px;
     margin-top:20px;padding-top:22px;border-top:2px solid var(--amber);}
   .total .lab{font-family:var(--serif);font-size:20px;}
-  .total .val{font-family:var(--mono);font-weight:700;font-size:29px;color:var(--amber);
-    font-variant-numeric:tabular-nums;text-shadow:0 0 26px rgba(227,170,82,.4);}
+  .total .val{font-family:var(--serif);font-weight:600;font-size:30px;color:var(--amber);
+    font-variant-numeric:tabular-nums;}
   .calc .fine{color:var(--muted);font-size:12.5px;margin-top:14px;}
 
   /* estimate cards */
-  .cards{margin-top:24px;display:grid;grid-template-columns:1fr;gap:14px;}
+  .cards{margin-top:22px;display:grid;grid-template-columns:1fr;gap:14px;}
   .card{background:var(--card);border:1px solid var(--line);border-radius:15px;padding:22px 24px;}
-  .card.hl{border-color:var(--amber-2);box-shadow:0 0 0 1px rgba(227,170,82,.22),0 20px 50px rgba(0,0,0,.4);}
   .card .ch{display:flex;justify-content:space-between;align-items:baseline;gap:12px;}
-  .card .cname{font-family:var(--serif);font-size:21px;}
+  .card .cname{font-family:var(--serif);font-size:20px;}
   .card .tg{color:var(--faint);font-size:11px;letter-spacing:.2em;text-transform:uppercase;margin-top:4px;}
-  .card .csum{font-family:var(--mono);font-weight:700;color:var(--amber);white-space:nowrap;
-    font-variant-numeric:tabular-nums;font-size:17px;}
+  .card .csum{color:var(--amber);font-weight:700;white-space:nowrap;font-variant-numeric:tabular-nums;font-size:17px;}
   .card ul{margin:14px 0 0;padding:0;list-style:none;display:flex;flex-direction:column;gap:7px;}
   .card li{color:var(--soft);font-size:14.5px;padding-left:18px;position:relative;}
   .card li::before{content:"";position:absolute;left:0;top:9px;width:5px;height:5px;
@@ -152,28 +142,18 @@
 
   /* conditions */
   ul.cond{margin:22px 0 0;padding:0;list-style:none;display:flex;flex-direction:column;gap:14px;}
-  ul.cond li{padding-left:22px;position:relative;color:var(--soft);font-size:15.5px;}
-  ul.cond li::before{content:"";position:absolute;left:2px;top:.62em;width:7px;height:7px;
+  ul.cond li{padding-left:22px;position:relative;color:var(--soft);font-size:15px;}
+  ul.cond li::before{content:"";position:absolute;left:2px;top:.6em;width:7px;height:7px;
     border-radius:50%;background:var(--amber);}
   ul.cond li b{color:var(--text);font-weight:600;}
 
-  /* showreel embed */
-  .embed{position:relative;aspect-ratio:16/9;margin-top:24px;border-radius:16px;overflow:hidden;
-    background:#000;border:1px solid var(--line-2);box-shadow:0 26px 64px rgba(0,0,0,.55);}
-  .embed iframe{position:absolute;inset:0;width:100%;height:100%;border:0;}
-  .embed-ph{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;
-    justify-content:center;gap:9px;text-align:center;color:var(--muted);font-size:15px;
-    background:radial-gradient(60% 60% at 50% 45%,rgba(227,170,82,.12),transparent 70%);}
-  .embed-ph small{color:var(--faint);font-size:12px;letter-spacing:.16em;text-transform:uppercase;}
-
   /* close */
   .close{border-top:1px solid var(--line);margin-top:20px;background:linear-gradient(180deg,var(--bg-2),var(--bg));}
-  .close .cta{font-family:var(--serif);font-size:clamp(21px,3.4vw,27px);}
-  .contacts{margin-top:24px;display:flex;flex-direction:column;gap:7px;font-size:16px;}
+  .close .cta{font-family:var(--serif);font-size:clamp(20px,3.2vw,26px);}
+  .contacts{margin-top:22px;display:flex;flex-direction:column;gap:7px;font-size:16px;}
   .contacts .who{font-weight:600;font-size:17px;}
   .contacts .who span{color:var(--muted);font-weight:400;}
-  .contacts a{color:var(--amber);text-decoration:none;font-family:var(--mono);letter-spacing:.02em;}
-  .legal{margin-top:32px;color:var(--faint);font-size:12px;letter-spacing:.03em;}
+  .contacts a{color:var(--amber);text-decoration:none;font-variant-numeric:tabular-nums;letter-spacing:.02em;}
 
   @keyframes rise{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:none;}}
   .fx{animation:rise .7s cubic-bezier(.2,.7,.2,1) both;}
@@ -183,21 +163,27 @@
 <body>
 
 <header class="top fx">
-  <div class="brandline">
-    <svg class="ring" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.4"/><path d="M8 1.6 V4.2 M8 11.8 V14.4 M1.6 8 H4.2 M11.8 8 H14.4"/></svg>
-    Flora Creative Studio · Рига
-  </div>
-  <h1>Ценовое предложение</h1>
-  <div class="subtitle">Видеосъёмка музыкального клипа</div>
-  <div class="tagline">Съёмка в Риге · монтаж · модульный набор услуг</div>
+  <svg class="mark" viewBox="0 0 48 48" aria-hidden="true">
+    <g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+      <ellipse cx="24" cy="13.6" rx="4.7" ry="8.7"/>
+      <ellipse cx="24" cy="13.6" rx="4.7" ry="8.7" transform="rotate(60 24 24)"/>
+      <ellipse cx="24" cy="13.6" rx="4.7" ry="8.7" transform="rotate(120 24 24)"/>
+      <ellipse cx="24" cy="13.6" rx="4.7" ry="8.7" transform="rotate(180 24 24)"/>
+      <ellipse cx="24" cy="13.6" rx="4.7" ry="8.7" transform="rotate(240 24 24)"/>
+      <ellipse cx="24" cy="13.6" rx="4.7" ry="8.7" transform="rotate(300 24 24)"/>
+      <circle cx="24" cy="24" r="2.7"/>
+    </g>
+  </svg>
+  <div class="brand">Flora Creative Studio · Рига</div>
+  <h1>Видеосъёмка музыкального клипа</h1>
+  <div class="tagline">Препродакшн · Съёмка · Монтаж</div>
   <div class="rule"></div>
 </header>
 
 <section>
   <div class="col">
     <div class="sh"><span class="snum">1</span><h2>О задаче и подходе</h2></div>
-    <p class="lead">Предложение собрано модульно: каждая услуга это отдельная позиция со своей ценой. Вы берёте только то, что нужно именно вашему клипу, от простой съёмки на одну локацию до полного цикла (сценарий, съёмка, монтаж). Так проще держать бюджет под контролем и ни за что лишнее не платить.</p>
-    <p class="lead">Работаю с одной камерой. Оборудование и транспорт для света привожу сам.</p>
+    <p class="lead">Предложение собрано модульно: вы берёте только то, что нужно вашему клипу, от простой съёмки до полного цикла. Так проще держать бюджет под контролем и не платить за лишнее.</p>
   </div>
 </section>
 
@@ -205,15 +191,15 @@
   <div class="col">
     <div class="sh"><span class="snum">2</span><h2>Съёмка</h2></div>
     <div class="ptable">
-      <div class="prow"><div class="pn">Съёмка без дополнительного света</div><div class="pp">50 € в час</div></div>
-      <div class="prow"><div class="pn">Съёмка со светом<small>Три прибора по 500 Вт на стойках</small></div><div class="pp">70 € в час</div></div>
+      <div class="prow"><div class="pn">Съёмка, базовый свет<small>Приборы 60 и 100 Вт</small></div><div class="pp">50 € в час</div></div>
+      <div class="prow"><div class="pn">Съёмка, усиленный свет<small>Три прибора по 500 Вт</small></div><div class="pp">70 € в час</div></div>
       <div class="prow"><div class="pn">Дым-машина</div><div class="pp">+20 €</div></div>
       <div class="prow"><div class="pn">Дрон, воздушные планы</div><div class="pp">+50 €</div></div>
     </div>
     <ul class="notes">
-      <li><b>Свет.</b> Для дневной уличной съёмки хватает естественного света. Для помещения, тени или съёмки ближе к закату нужен профессиональный: три прибора по 500 Вт на стойках красиво ставят свет на группу.</li>
-      <li><b>Дым-машина.</b> Создаёт атмосферную дымку: свет становится объёмным, картинка глубже и кинематографичнее. Рассчитана на помещение примерно от 70 до 100 м².</li>
-      <li><b>Дрон.</b> Возможность аэросъёмки зависит от локации: есть зоны, где полёты запрещены. Уточняем заранее, до съёмки.</li>
+      <li><b>Свет.</b> Базовый (60 и 100 Вт) подходит для одного человека в кадре, в помещении или на улице. Три прибора по 500 Вт заметно повышают качество картинки.</li>
+      <li><b>Дым-машина.</b> Атмосферная дымка: картинка становится объёмнее и глубже. Рассчитана на помещение до 100 м².</li>
+      <li><b>Дрон.</b> Возможность аэросъёмки зависит от локации: есть зоны, где полёты запрещены. Уточняем заранее.</li>
     </ul>
   </div>
 </section>
@@ -225,18 +211,17 @@
     <div class="tiers">
       <div class="tier">
         <div class="th"><span class="tname">Без сценария</span><span class="tprice">0 €</span></div>
-        <p>Вы всё продумываете и организуете сами: идея, локации, реквизит. Присылаете готовый сценарий, я приезжаю и снимаю.</p>
+        <p>Вы всё готовите сами. На площадке я работаю с тем, что есть, и руковожу по ситуации на месте.</p>
       </div>
       <div class="tier">
         <div class="th"><span class="tname">Участие</span><span class="tprice">100 €</span></div>
-        <p>Подключаюсь к идее: помогаю с раскадровкой и картинкой, подсказываю по свету и кадру. Организацию и локации вы ведёте сами.</p>
+        <p>Организацию, локации и сценарий вы ведёте сами, ищете референсы. Я вношу правки и подсказываю, как лучше. На съёмке максимально включён за свою часть, монтаж на мне.</p>
       </div>
       <div class="tier">
         <div class="th"><span class="tname">Под ключ</span><span class="tprice">300 €</span></div>
-        <p>Беру всё на себя: концепция, раскадровка, подбор локаций, все согласования и переписка, разрешения. Полная разработка от идеи до готового сценария.</p>
+        <p>Беру всё на себя. Своё видение и концепцию присылаю за неделю или две, дальше обсуждаем и докручиваем в несколько раундов. Переписка и согласования на мне. После утверждения сценарий становится точкой отсчёта проекта.</p>
       </div>
     </div>
-    <p class="lead">Утверждённый сценарий это точка отсчёта всего проекта. Дальше съёмка и монтаж идут строго по нему, быстро и без путаницы.</p>
   </div>
 </section>
 
@@ -247,13 +232,13 @@
       <div class="lbl">Ориентир</div>
       <div class="big">от 200 до 600 €</div>
     </div>
-    <p class="lead">Монтаж считается не по часам, а по объёму работы. Цена зависит от нескольких вещей:</p>
+    <p class="lead">Цена зависит от нескольких вещей:</p>
     <ul class="notes">
-      <li>сложности и длительности самого монтажа;</li>
-      <li>объёма отснятого материала и количества локаций;</li>
-      <li>длительности трека.</li>
+      <li>длительности трека;</li>
+      <li>объёма снятого материала и количества локаций;</li>
+      <li>сложности задачи, которую ставит заказчик (эффекты и прочее).</li>
     </ul>
-    <p class="lead">Точную цифру можно назвать только после утверждённого сценария: тогда понятно, сколько будет материала и какая сборка. В базовый монтаж входят подбор материала, ритм, цветокоррекция, звук, роялти-фри музыка из библиотеки и 2 круга правок.</p>
+    <p class="lead">Точную цифру называю после утверждённого сценария. В монтаж входят подбор материала, ритм, цветокоррекция, звук и 2 круга правок.</p>
   </div>
 </section>
 
@@ -275,11 +260,11 @@
       </div>
 
       <div class="crow">
-        <div class="cl"><div class="t">Съёмка</div><div class="s">Выберите режим и число часов</div></div>
+        <div class="cl"><div class="t">Съёмка</div><div class="s">Режим света</div></div>
         <div class="ctrl">
           <div class="seg">
-            <input type="radio" name="light" id="l-no" value="50" checked><label for="l-no">Без света · 50 €/ч</label>
-            <input type="radio" name="light" id="l-yes" value="70"><label for="l-yes">Со светом · 70 €/ч</label>
+            <input type="radio" name="light" id="l-no" value="50" checked><label for="l-no">Базовый · 50 €/ч</label>
+            <input type="radio" name="light" id="l-yes" value="70"><label for="l-yes">Усиленный · 70 €/ч</label>
           </div>
         </div>
       </div>
@@ -296,7 +281,7 @@
       </div>
 
       <div class="crow">
-        <div class="cl"><div class="t">Дым-машина</div><div class="s">Атмосферная дымка, 70 до 100 м²</div></div>
+        <div class="cl"><div class="t">Дым-машина</div><div class="s">Атмосферная дымка</div></div>
         <div class="ctrl">
           <span class="cprice" id="p-fog">20 €</span>
           <label class="sw"><input type="checkbox" id="c-fog" aria-label="Дым-машина"><span class="track"></span></label>
@@ -323,8 +308,8 @@
         <div class="ctrl">
           <select id="c-travel" aria-label="Выезд">
             <option value="0">По Риге · 0 €</option>
-            <option value="50">Юрмала · ~50 €</option>
-            <option value="100">До 50 км · ~100 €</option>
+            <option value="50">До 20 км · 50 €</option>
+            <option value="100">До 50 км · 100 €</option>
           </select>
         </div>
       </div>
@@ -354,14 +339,14 @@
           <li>Монтаж клипа</li>
         </ul>
       </div>
-      <div class="card hl">
+      <div class="card">
         <div class="ch">
           <div><div class="cname">Средний</div><div class="tg">Со светом и дымкой</div></div>
           <span class="csum">от 700 €</span>
         </div>
         <ul>
           <li>Участие в сценарии</li>
-          <li>Съёмка около 4 часов со светом</li>
+          <li>Съёмка около 4 часов, усиленный свет</li>
           <li>Дым-машина для атмосферы</li>
           <li>Монтаж средней сложности</li>
         </ul>
@@ -375,11 +360,11 @@
           <li>Сценарий под ключ</li>
           <li>Две локации, свет, дрон</li>
           <li>Дым-машина</li>
-          <li>Монтаж с графикой</li>
+          <li>Монтаж с эффектами</li>
         </ul>
       </div>
     </div>
-    <p class="lead" style="color:var(--muted);font-size:14.5px;">Итог зависит только от объёма, который выбираете вы: часы съёмки, число локаций, длительность трека и сложность монтажа.</p>
+    <p class="lead" style="color:var(--muted);font-size:14.5px;">Это просто примеры, как складывается смета. Итог зависит от объёма, который выбираете вы.</p>
   </div>
 </section>
 
@@ -387,36 +372,24 @@
   <div class="col">
     <div class="sh"><span class="snum">7</span><h2>Условия</h2></div>
     <ul class="cond">
-      <li><b>Цены финальные,</b> PVN не добавляется (самозанятый).</li>
-      <li><b>Оплата.</b> Сценарий 100 % вперёд. Съёмка и монтаж: 50 % на планирование, 50 % при сдаче готового.</li>
-      <li><b>Сроки.</b> Сценарий около недели. Готовый клип обычно до 2 недель после съёмки, зависит от сложности монтажа. Нужен экспресс, договоримся отдельно.</li>
-      <li><b>Съёмочные дни.</b> Клип можно снять за один день или несколько часов, а можно за несколько дней. Зависит от идеи и бюджета.</li>
-      <li><b>Выезд.</b> По Риге бесплатно. Юрмала около 50 €, до 50 км около 100 €, дальше по договорённости.</li>
-      <li><b>Правки.</b> Включено 2 круга в рамках утверждённого сценария.</li>
+      <li><b>Цены финальные,</b> PVN не добавляется.</li>
+      <li><b>Оплата.</b> Сценарий 100 % вперёд. Съёмка: 20 % предоплата, 80 % в день съёмки. Монтаж: 50 % в конце съёмочного дня, 50 % при сдаче готового.</li>
+      <li><b>Сроки.</b> Сценарий около недели, максимум две. Готовый клип обычно до 2 недель после съёмки. Нужен экспресс, договоримся отдельно.</li>
+      <li><b>Съёмочные дни.</b> Клип можно снять за один день или несколько часов, а можно за несколько дней.</li>
+      <li><b>Выезд.</b> По Риге 0 €. До 20 км от Риги 50 €, до 50 км 100 €, дальше по договорённости.</li>
+      <li><b>Правки.</b> Включено 2 круга. Если правок нет в течение недели после присланной версии, она считается принятой.</li>
       <li><b>Срок действия предложения:</b> 30 дней.</li>
     </ul>
   </div>
 </section>
 
-<section>
-  <div class="col">
-    <div class="sh"><span class="snum">8</span><h2>Шоурил</h2></div>
-    <p class="lead">Моя нарезка работ. Есть и отдельные клиповые работы, пришлю по запросу под вашу стилистику.</p>
-    <div class="embed">
-      <!-- сюда встанет iframe плеера Vimeo/YouTube -->
-      <div class="embed-ph">Плеер шоурила появится здесь<small>Vimeo или YouTube · HD</small></div>
-    </div>
-  </div>
-</section>
-
 <section class="close">
   <div class="col">
-    <p class="cta">Готов обсудить идею и собрать точную смету. Начинаем со сценария, дальше по нему снимаем и монтируем.</p>
+    <p class="cta">Открыт к обсуждению идеи и деталей проекта. Напишите, и соберём вариант под вас.</p>
     <div class="contacts">
       <div class="who">Андрей <span>· Flora Creative Studio</span></div>
       <div>Звонок или WhatsApp: <a href="tel:+37127775842">+371 27 775 842</a></div>
     </div>
-    <p class="legal">Рига, Латвия. Подготовлено для AKOPYAN BAND.</p>
   </div>
 </section>
 
