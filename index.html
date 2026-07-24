@@ -3,7 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Flora Creative Studio — видеосъёмка музыкального клипа</title>
+<title>Flora Creative Studio · видеосъёмка музыкального клипа</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   *,*::before,*::after{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
@@ -13,8 +16,8 @@
     --text:#EBE7DE; --soft:#C4BEB2; --muted:#8E8777; --faint:#6A6558;
     --line:#272430; --line-2:#34313E;
     --amber:#E3AA52; --amber-2:#C98F45;
-    --serif:"Iowan Old Style","Palatino Linotype",Palatino,"Book Antiqua",Georgia,ui-serif,serif;
-    --sans:"Segoe UI",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+    --serif:"Fraunces","Iowan Old Style","Palatino Linotype",Georgia,ui-serif,serif;
+    --sans:"Manrope","Segoe UI",system-ui,-apple-system,Arial,sans-serif;
   }
 
   body{background:var(--bg);color:var(--text);font-family:var(--sans);
@@ -32,7 +35,7 @@
   .top{text-align:center;padding:60px 26px 40px;}
   .mark{width:46px;height:46px;color:var(--amber);display:inline-block;}
   .brand{margin-top:16px;font-size:11.5px;letter-spacing:.28em;text-transform:uppercase;color:var(--muted);}
-  .top h1{font-size:clamp(30px,5.6vw,44px);margin:20px 0 0;letter-spacing:.3px;}
+  .top h1{font-size:clamp(31px,5.8vw,46px);margin:20px 0 0;letter-spacing:-.3px;}
   .top .tagline{margin-top:16px;font-size:12.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--amber);}
   .rule{width:min(540px,84%);height:1px;margin:38px auto 0;
     background:linear-gradient(90deg,transparent,var(--line-2),transparent);}
@@ -65,7 +68,7 @@
   .tiers{margin-top:22px;display:flex;flex-direction:column;gap:12px;}
   .tier{border:1px solid var(--line);border-radius:14px;padding:18px 20px;background:var(--card);}
   .tier .th{display:flex;justify-content:space-between;align-items:baseline;gap:14px;}
-  .tier .tname{font-family:var(--serif);font-size:19px;}
+  .tier .tname{font-family:var(--serif);font-weight:600;font-size:20px;}
   .tier .tprice{color:var(--amber);font-weight:700;font-variant-numeric:tabular-nums;}
   .tier p{color:var(--soft);font-size:14.5px;margin-top:8px;}
 
@@ -132,7 +135,7 @@
   .cards{margin-top:22px;display:grid;grid-template-columns:1fr;gap:14px;}
   .card{background:var(--card);border:1px solid var(--line);border-radius:15px;padding:22px 24px;}
   .card .ch{display:flex;justify-content:space-between;align-items:baseline;gap:12px;}
-  .card .cname{font-family:var(--serif);font-size:20px;}
+  .card .cname{font-family:var(--serif);font-weight:600;font-size:20px;}
   .card .tg{color:var(--faint);font-size:11px;letter-spacing:.2em;text-transform:uppercase;margin-top:4px;}
   .card .csum{color:var(--amber);font-weight:700;white-space:nowrap;font-variant-numeric:tabular-nums;font-size:17px;}
   .card ul{margin:14px 0 0;padding:0;list-style:none;display:flex;flex-direction:column;gap:7px;}
@@ -191,13 +194,13 @@
   <div class="col">
     <div class="sh"><span class="snum">2</span><h2>Съёмка</h2></div>
     <div class="ptable">
-      <div class="prow"><div class="pn">Съёмка, базовый свет<small>Приборы 60 и 100 Вт</small></div><div class="pp">50 € в час</div></div>
+      <div class="prow"><div class="pn">Съёмка, базовый свет<small>1 прибор 60 и 100 Вт</small></div><div class="pp">50 € в час</div></div>
       <div class="prow"><div class="pn">Съёмка, усиленный свет<small>Три прибора по 500 Вт</small></div><div class="pp">70 € в час</div></div>
       <div class="prow"><div class="pn">Дым-машина</div><div class="pp">+20 €</div></div>
       <div class="prow"><div class="pn">Дрон, воздушные планы</div><div class="pp">+50 €</div></div>
     </div>
     <ul class="notes">
-      <li><b>Свет.</b> Базовый (60 и 100 Вт) подходит для одного человека в кадре, в помещении или на улице. Три прибора по 500 Вт заметно повышают качество картинки.</li>
+      <li><b>Свет.</b> Базовый (1 прибор 60 и 100 Вт) подходит для одного человека в кадре, в помещении или на улице. Три прибора по 500 Вт заметно повышают качество картинки.</li>
       <li><b>Дым-машина.</b> Атмосферная дымка: картинка становится объёмнее и глубже. Рассчитана на помещение до 100 м².</li>
       <li><b>Дрон.</b> Возможность аэросъёмки зависит от локации: есть зоны, где полёты запрещены. Уточняем заранее.</li>
     </ul>
@@ -211,15 +214,15 @@
     <div class="tiers">
       <div class="tier">
         <div class="th"><span class="tname">Без сценария</span><span class="tprice">0 €</span></div>
-        <p>Вы всё готовите сами. На площадке я работаю с тем, что есть, и руковожу по ситуации на месте.</p>
+        <p>Всю подготовку клиент берёт на себя: референсы, сценарий, план съёмки. На площадке руковожу я: следую готовому плану, ставлю свет, веду процесс. Снимаем строго по вашему сценарию.</p>
       </div>
       <div class="tier">
         <div class="th"><span class="tname">Участие</span><span class="tprice">100 €</span></div>
-        <p>Организацию, локации и сценарий вы ведёте сами, ищете референсы. Я вношу правки и подсказываю, как лучше. На съёмке максимально включён за свою часть, монтаж на мне.</p>
+        <p>Организацию, локации и сценарий вы ведёте сами, ищете референсы. Я вношу правки и подсказываю, как лучше. На площадке отвечаю за то же: веду съёмку по плану и ставлю свет.</p>
       </div>
       <div class="tier">
         <div class="th"><span class="tname">Под ключ</span><span class="tprice">300 €</span></div>
-        <p>Беру всё на себя. Своё видение и концепцию присылаю за неделю или две, дальше обсуждаем и докручиваем в несколько раундов. Переписка и согласования на мне. После утверждения сценарий становится точкой отсчёта проекта.</p>
+        <p>Беру всё на себя. Сначала обсуждаем ваши пожелания и мысли, затем в течение недели или двух присылаю референсы и несколько вариантов концепции. Докручиваем в несколько раундов до финала. Поиск локаций и все согласования тоже на мне.</p>
       </div>
     </div>
   </div>
@@ -310,6 +313,7 @@
             <option value="0">По Риге · 0 €</option>
             <option value="50">До 20 км · 50 €</option>
             <option value="100">До 50 км · 100 €</option>
+            <option value="100">Больше 50 км · договорная</option>
           </select>
         </div>
       </div>
