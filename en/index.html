@@ -99,7 +99,7 @@
 <section>
   <div class="col">
     <div class="sh"><span class="snum">5</span><h2>Calculator</h2></div>
-    <p class="lead">Tick what you need and see an approximate total. Editing here is counted at the minimum (from 200 €); the exact figure is fixed after the script.</p>
+    <p class="lead">Tick what you need and see an approximate total. Editing can be switched off if you don't need it; the exact editing figure is fixed after the script.</p>
 
     <div class="calc">
       <div class="crow">
@@ -151,9 +151,10 @@
       </div>
 
       <div class="crow">
-        <div class="cl"><div class="t">Editing</div><div class="s">Exact after the script</div></div>
+        <div class="cl"><div class="t">Editing</div><div class="s">from 200 to 600 €, exact after the script</div></div>
         <div class="ctrl">
-          <span class="cprice info">from 200 to 600 €</span>
+          <span class="cprice on" id="p-montage">from 200 €</span>
+          <label class="sw"><input type="checkbox" id="c-montage" checked aria-label="Editing"><span class="track"></span></label>
         </div>
       </div>
 
@@ -173,7 +174,7 @@
         <span class="lab">Approximately</span>
         <span class="val" id="c-total">from 320 €</span>
       </div>
-      <p class="fine">Prices are final, PVN is not added. The total includes editing at the minimum (200 €); editing can reach 600 € depending on complexity.</p>
+      <p class="fine">Prices are final, PVN is not added. Editing can be switched off. When included, it's counted at the minimum (200 €) and can reach 600 € depending on complexity.</p>
     </div>
   </div>
 </section>

@@ -99,7 +99,7 @@
 <section>
   <div class="col">
     <div class="sh"><span class="snum">5</span><h2>Калькулятор</h2></div>
-    <p class="lead">Отметьте, что нужно, и увидите ориентир по сумме. Монтаж здесь взят по минимуму (от 200 €), точную цифру фиксируем после сценария.</p>
+    <p class="lead">Отметьте, что нужно, и увидите ориентир по сумме. Монтаж можно убрать, если он не нужен; точную цифру по монтажу фиксируем после сценария.</p>
 
     <div class="calc">
       <div class="crow">
@@ -151,9 +151,10 @@
       </div>
 
       <div class="crow">
-        <div class="cl"><div class="t">Монтаж</div><div class="s">Точно после сценария</div></div>
+        <div class="cl"><div class="t">Монтаж</div><div class="s">от 200 до 600 €, точно после сценария</div></div>
         <div class="ctrl">
-          <span class="cprice info">от 200 до 600 €</span>
+          <span class="cprice on" id="p-montage">от 200 €</span>
+          <label class="sw"><input type="checkbox" id="c-montage" checked aria-label="Монтаж"><span class="track"></span></label>
         </div>
       </div>
 
@@ -173,7 +174,7 @@
         <span class="lab">Ориентировочно</span>
         <span class="val" id="c-total">от 320 €</span>
       </div>
-      <p class="fine">Цены финальные, PVN не добавляется. В сумму включён монтаж по минимуму (200 €), итог по монтажу до 600 € в зависимости от сложности.</p>
+      <p class="fine">Цены финальные, PVN не добавляется. Монтаж можно убрать. Если включён, заложен по минимуму (200 €), итог по монтажу до 600 € в зависимости от сложности.</p>
     </div>
   </div>
 </section>
