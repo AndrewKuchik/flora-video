@@ -1,0 +1,111 @@
+{
+  "title": "Flora Creative Studio · music video production",
+  "h1": "Music video production",
+  "tagline": "Pre-production · Filming · Editing",
+  "sections": [
+    {
+      "heading": "The approach",
+      "elements": [
+        { "type": "p", "text": "The offer is modular: you take only what your clip needs, from a simple shoot to the full cycle. That keeps the budget under control, with nothing paid for in excess." }
+      ]
+    },
+    {
+      "heading": "Filming",
+      "elements": [
+        { "type": "priceTable", "rows": [
+          { "name": "Filming, basic light", "sub": "1 fixture, 60 and 100 W", "price": "50 € per hour" },
+          { "name": "Filming, enhanced light", "sub": "Three 500 W fixtures", "price": "70 € per hour" },
+          { "name": "Fog machine", "price": "+20 €" },
+          { "name": "Drone, aerial shots", "price": "+50 €" }
+        ] },
+        { "type": "notes", "items": [
+          { "strong": "Light.", "text": "Basic (1 fixture, 60 and 100 W) suits one person in frame, indoors or outdoors. Three 500 W fixtures noticeably raise the image quality." },
+          { "strong": "Fog machine.", "text": "Atmospheric haze: the image gains depth and volume. Covers a room up to 100 m²." },
+          { "strong": "Drone.", "text": "Aerial filming depends on the location: some zones are no-fly. We confirm in advance." }
+        ] }
+      ]
+    },
+    {
+      "heading": "Script and pre-production",
+      "elements": [
+        { "type": "p", "text": "How deeply I'm involved in the idea is up to you. Three formats:" },
+        { "type": "tiers", "items": [
+          { "name": "No script", "price": "0 €", "text": "The client handles all the prep: references, script, shot plan. On set I direct: I follow the ready plan, set the light and run the process. We shoot strictly to your script." },
+          { "name": "Involvement", "price": "100 €", "text": "You handle the organisation, locations and script and gather references. I give notes and suggest what works better. On set I cover the same: I run the filming to the plan and set the light." },
+          { "name": "Full service", "price": "300 €", "text": "I take on everything. First we discuss your wishes and ideas, then within a week or two I send references and several concept options. We refine over a few rounds to the final. Scouting locations and all approvals are on me too." }
+        ] }
+      ]
+    },
+    {
+      "heading": "Editing",
+      "elements": [
+        { "type": "callout", "label": "Guide", "big": "from 200 to 600 €" },
+        { "type": "p", "text": "The price depends on a few things:" },
+        { "type": "notes", "items": [
+          { "text": "the length of the track;" },
+          { "text": "the volume of footage and number of locations;" },
+          { "text": "the complexity the client sets (effects and so on)." }
+        ] },
+        { "type": "p", "text": "I give the exact figure after the script is approved. Editing includes footage selection, rhythm, colour correction, sound and 2 rounds of revisions." }
+      ]
+    },
+    {
+      "heading": "Calculator",
+      "elements": [
+        { "type": "p", "text": "Tick what you need and see an approximate total. Editing can be switched off if you don't need it; the exact editing figure is fixed after the script." },
+        { "type": "calculator", "config": {
+          "totalLabel": "Approximately",
+          "fine": "Prices are final, PVN is not added. Editing can be switched off. When included, it's counted at the minimum (200 €) and can reach 600 € depending on complexity.",
+          "rows": [
+            { "type": "select", "label": "Script", "sub": "Idea, locations, approvals", "options": [
+              { "label": "No script · 0 €", "value": 0 },
+              { "label": "Involvement · 100 €", "value": 100 },
+              { "label": "Full service · 300 €", "value": 300 }
+            ] },
+            { "type": "lightHours", "label": "Filming", "sub": "Light mode", "hoursLabel": "Filming hours", "hoursDefault": 2, "hoursMin": 1, "hoursMax": 12, "lights": [
+              { "label": "Basic · 50 €/h", "rate": 50 },
+              { "label": "Enhanced · 70 €/h", "rate": 70 }
+            ] },
+            { "type": "toggle", "key": "fog", "label": "Fog machine", "sub": "Atmospheric haze", "price": 20, "default": false },
+            { "type": "toggle", "key": "drone", "label": "Drone", "sub": "Depends on location", "price": 50, "default": false },
+            { "type": "toggle", "key": "montage", "label": "Editing", "sub": "from 200 to 600 €, exact after the script", "price": 200, "priceLabel": "from 200 €", "default": true },
+            { "type": "select", "label": "Travel", "sub": "Beyond 50 km by arrangement", "options": [
+              { "label": "In Riga · 20 €", "value": 20 },
+              { "label": "Up to 20 km · 50 €", "value": 50 },
+              { "label": "Up to 50 km · 100 €", "value": 100 },
+              { "label": "Over 50 km · by arrangement", "value": 100 }
+            ] }
+          ]
+        } }
+      ]
+    },
+    {
+      "heading": "Sample estimate",
+      "elements": [
+        { "type": "cards", "items": [
+          { "name": "Simple", "tag": "Your idea", "sum": "from 320 €", "points": ["The band's own idea", "One location in Riga", "About 2 hours of filming", "Clip editing"] },
+          { "name": "Medium", "tag": "With light and haze", "sum": "from 700 €", "points": ["Involvement in the script", "About 4 hours, enhanced light", "Fog machine for atmosphere", "Medium-complexity editing"] },
+          { "name": "Extended", "tag": "Full cycle", "sum": "from 1100 €", "points": ["Full-service script", "Two locations, light, drone", "Fog machine", "Editing with effects"] }
+        ] },
+        { "type": "p", "muted": true, "text": "These are just examples of how an estimate adds up. The total depends on the scope you choose." }
+      ]
+    },
+    {
+      "heading": "Terms",
+      "elements": [
+        { "type": "conditions", "items": [
+          { "strong": "Prices are final,", "text": "PVN is not added." },
+          { "strong": "Payment.", "text": "Script 100 % upfront. Filming: 20 % deposit, 80 % on the shoot day. Editing: 50 % at the end of the shoot day, 50 % on delivery." },
+          { "strong": "Timeline.", "text": "Script about a week, two at most. The finished clip usually within 2 weeks after filming. If you need a rush, we arrange it separately." },
+          { "strong": "Shoot days.", "text": "A clip can be filmed in one day or a few hours, or across several days." },
+          { "strong": "Travel.", "text": "In Riga 20 €. Up to 20 km from Riga 50 €, up to 50 km 100 €, further by arrangement." },
+          { "strong": "Revisions.", "text": "2 rounds included. If no notes arrive within a week of the sent version, it is considered accepted." },
+          { "strong": "Offer valid for:", "text": "30 days." }
+        ] }
+      ]
+    }
+  ],
+  "close": {
+    "cta": "Open to discussing the idea and project details. Write to me and we'll put together a version for you."
+  }
+}

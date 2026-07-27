@@ -1,0 +1,111 @@
+{
+  "title": "Flora Creative Studio · mūzikas videoklipa filmēšana",
+  "h1": "Mūzikas videoklipa filmēšana",
+  "tagline": "Pirmsprodukcija · Filmēšana · Montāža",
+  "sections": [
+    {
+      "heading": "Par uzdevumu un pieeju",
+      "elements": [
+        { "type": "p", "text": "Piedāvājums ir veidots moduļos: jūs izvēlaties tikai to, kas nepieciešams tieši jūsu klipam, sākot no vienkāršas filmēšanas līdz pilnam ciklam. Tā vieglāk kontrolēt budžetu un nemaksāt par lieko." }
+      ]
+    },
+    {
+      "heading": "Filmēšana",
+      "elements": [
+        { "type": "priceTable", "rows": [
+          { "name": "Filmēšana, pamata gaisma", "sub": "1 gaismeklis 60 un 100 W", "price": "50 € stundā" },
+          { "name": "Filmēšana, pastiprināta gaisma", "sub": "Trīs prožektori pa 500 W", "price": "70 € stundā" },
+          { "name": "Dūmu mašīna", "price": "+20 €" },
+          { "name": "Drons, gaisa kadri", "price": "+50 €" }
+        ] },
+        { "type": "notes", "items": [
+          { "strong": "Gaisma.", "text": "Pamata gaisma (1 gaismeklis 60 un 100 W) der vienam cilvēkam kadrā, telpā vai ārā. Trīs prožektori pa 500 W būtiski uzlabo attēla kvalitāti." },
+          { "strong": "Dūmu mašīna.", "text": "Atmosfēriska dūmaka: attēls kļūst dziļāks un apjomīgāks. Paredzēta telpai līdz 100 m²." },
+          { "strong": "Drons.", "text": "Gaisa filmēšanas iespēja atkarīga no lokācijas: ir zonas, kur lidojumi ir aizliegti. Precizējam iepriekš." }
+        ] }
+      ]
+    },
+    {
+      "heading": "Scenārijs un pirmsprodukcija",
+      "elements": [
+        { "type": "p", "text": "Cik dziļi es iesaistos idejā, izlemjat jūs. Trīs formāti:" },
+        { "type": "tiers", "items": [
+          { "name": "Bez scenārija", "price": "0 €", "text": "Visu sagatavošanu klients uzņemas pats: atsauces, scenāriju, filmēšanas plānu. Laukumā vadu es: sekoju gatavajam plānam, izgaismoju kadru un vadu procesu. Filmējam stingri pēc jūsu scenārija." },
+          { "name": "Līdzdalība", "price": "100 €", "text": "Organizāciju, lokācijas un scenāriju vadāt paši, meklējat atsauces. Es sniedzu labojumus un ieteikumus, kā labāk. Laukumā atbildu par to pašu: vadu filmēšanu pēc plāna un izgaismoju kadru." },
+          { "name": "Pilns cikls", "price": "300 €", "text": "Uzņemos visu. Vispirms pārrunājam jūsu vēlmes un idejas, tad nedēļas vai divu laikā atsūtu atsauces un vairākus koncepcijas variantus. Noslīpējam vairākās kārtās līdz galarezultātam. Lokāciju meklēšana un visi saskaņojumi arī ir uz manis." }
+        ] }
+      ]
+    },
+    {
+      "heading": "Montāža",
+      "elements": [
+        { "type": "callout", "label": "Orientējoši", "big": "no 200 līdz 600 €" },
+        { "type": "p", "text": "Cena ir atkarīga no vairākiem faktoriem:" },
+        { "type": "notes", "items": [
+          { "text": "dziesmas garuma;" },
+          { "text": "uzņemtā materiāla apjoma un lokāciju skaita;" },
+          { "text": "uzdevuma sarežģītības, ko izvirza pasūtītājs (efekti un citi)." }
+        ] },
+        { "type": "p", "text": "Precīzu summu nosaucu pēc apstiprināta scenārija. Montāžā ietilpst materiāla atlase, ritms, krāsu korekcija, skaņa un 2 labojumu kārtas." }
+      ]
+    },
+    {
+      "heading": "Kalkulators",
+      "elements": [
+        { "type": "p", "text": "Atzīmējiet nepieciešamo un redzēsiet aptuvenu summu. Montāžu var noņemt, ja tā nav vajadzīga; precīzu montāžas summu fiksējam pēc scenārija." },
+        { "type": "calculator", "config": {
+          "totalLabel": "Aptuveni",
+          "fine": "Cenas ir galīgas, PVN netiek piemērots. Montāžu var noņemt. Ja iekļauta, tā rēķināta pēc minimuma (200 €), gala summa līdz 600 € atkarībā no sarežģītības.",
+          "rows": [
+            { "type": "select", "label": "Scenārijs", "sub": "Ideja, lokācijas, saskaņojumi", "options": [
+              { "label": "Bez scenārija · 0 €", "value": 0 },
+              { "label": "Līdzdalība · 100 €", "value": 100 },
+              { "label": "Pilns cikls · 300 €", "value": 300 }
+            ] },
+            { "type": "lightHours", "label": "Filmēšana", "sub": "Gaismas režīms", "hoursLabel": "Filmēšanas stundas", "hoursDefault": 2, "hoursMin": 1, "hoursMax": 12, "lights": [
+              { "label": "Pamata · 50 €/st", "rate": 50 },
+              { "label": "Pastiprināta · 70 €/st", "rate": 70 }
+            ] },
+            { "type": "toggle", "key": "fog", "label": "Dūmu mašīna", "sub": "Atmosfēriska dūmaka", "price": 20, "default": false },
+            { "type": "toggle", "key": "drone", "label": "Drons", "sub": "Atkarīgs no lokācijas", "price": 50, "default": false },
+            { "type": "toggle", "key": "montage", "label": "Montāža", "sub": "no 200 līdz 600 €, precīzi pēc scenārija", "price": 200, "priceLabel": "no 200 €", "default": true },
+            { "type": "select", "label": "Izbraukums", "sub": "Tālāk par 50 km pēc vienošanās", "options": [
+              { "label": "Rīgā · 20 €", "value": 20 },
+              { "label": "Līdz 20 km · 50 €", "value": 50 },
+              { "label": "Līdz 50 km · 100 €", "value": 100 },
+              { "label": "Vairāk par 50 km · pēc vienošanās", "value": 100 }
+            ] }
+          ]
+        } }
+      ]
+    },
+    {
+      "heading": "Tāmes piemērs",
+      "elements": [
+        { "type": "cards", "items": [
+          { "name": "Vienkāršs", "tag": "Jūsu ideja", "sum": "no 320 €", "points": ["Grupas gatava ideja", "Viena lokācija Rīgā", "Filmēšana ap 2 stundām", "Klipa montāža"] },
+          { "name": "Vidējs", "tag": "Ar gaismu un dūmaku", "sum": "no 700 €", "points": ["Līdzdalība scenārijā", "Filmēšana ap 4 stundām, pastiprināta gaisma", "Dūmu mašīna atmosfērai", "Vidējas sarežģītības montāža"] },
+          { "name": "Paplašināts", "tag": "Pilns cikls", "sum": "no 1100 €", "points": ["Scenārijs pilnā ciklā", "Divas lokācijas, gaisma, drons", "Dūmu mašīna", "Montāža ar efektiem"] }
+        ] },
+        { "type": "p", "muted": true, "text": "Šie ir tikai piemēri, kā veidojas tāme. Gala summa atkarīga no apjoma, ko izvēlaties jūs." }
+      ]
+    },
+    {
+      "heading": "Nosacījumi",
+      "elements": [
+        { "type": "conditions", "items": [
+          { "strong": "Cenas ir galīgas,", "text": "PVN netiek piemērots." },
+          { "strong": "Apmaksa.", "text": "Scenārijs 100 % avansā. Filmēšana: 20 % avanss, 80 % filmēšanas dienā. Montāža: 50 % filmēšanas dienas beigās, 50 % pēc gatavā darba nodošanas." },
+          { "strong": "Termiņi.", "text": "Scenārijs apmēram nedēļa, maksimums divas. Gatavs klips parasti līdz 2 nedēļām pēc filmēšanas. Ja vajadzīgs ekspress, vienojamies atsevišķi." },
+          { "strong": "Filmēšanas dienas.", "text": "Klipu var nofilmēt vienā dienā vai dažās stundās, vai arī vairākās dienās." },
+          { "strong": "Izbraukums.", "text": "Rīgā 20 €. Līdz 20 km no Rīgas 50 €, līdz 50 km 100 €, tālāk pēc vienošanās." },
+          { "strong": "Labojumi.", "text": "Iekļautas 2 kārtas. Ja nedēļas laikā pēc nosūtītās versijas labojumi nav saņemti, tā tiek uzskatīta par pieņemtu." },
+          { "strong": "Piedāvājuma derīguma termiņš:", "text": "30 dienas." }
+        ] }
+      ]
+    }
+  ],
+  "close": {
+    "cta": "Esmu atvērts pārrunāt ideju un projekta detaļas. Rakstiet, un saliksim variantu tieši jums."
+  }
+}

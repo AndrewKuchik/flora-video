@@ -1,0 +1,16 @@
+---
+const { el } = Astro.props;
+---
+<div class="cards">
+  {el.items.map((c) => (
+    <div class="card">
+      <div class="ch">
+        <div><div class="cname">{c.name}</div><div class="tg">{c.tag}</div></div>
+        <span class="csum">{c.sum}</span>
+      </div>
+      <ul>
+        {c.points.map((p) => <li>{p}</li>)}
+      </ul>
+    </div>
+  ))}
+</div>

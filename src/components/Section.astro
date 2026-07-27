@@ -1,0 +1,10 @@
+---
+import Element from './Element.astro';
+const { section, num, loc } = Astro.props;
+---
+<section>
+  <div class="col">
+    <div class="sh"><span class="snum">{num}</span><h2>{section.heading}</h2></div>
+    {section.elements.map((el) => <Element el={el} loc={loc} />)}
+  </div>
+</section>

@@ -1,0 +1,11 @@
+---
+const { el } = Astro.props;
+---
+<div class="ptable">
+  {el.rows.map((r) => (
+    <div class="prow">
+      <div class="pn">{r.name}{r.sub && <small>{r.sub}</small>}</div>
+      <div class="pp">{r.price}</div>
+    </div>
+  ))}
+</div>

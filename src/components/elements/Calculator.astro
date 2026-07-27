@@ -1,0 +1,82 @@
+---
+const { el, loc } = Astro.props;
+const cfg = el.config;
+const from = loc.from;
+const numLoc = loc.numberLocale;
+
+function fmt(n) { return Number(n).toLocaleString(numLoc) + ' €'; }
+
+// Начальная сумма считается из тех же данных, чтобы совпадать с тем,
+// что калькулятор покажет после загрузки JS (значение до JS — только заглушка).
+let initial = 0;
+for (const row of cfg.rows) {
+  if (row.type === 'select') initial += Number(row.options[0].value) || 0;
+  else if (row.type === 'lightHours') initial += (Number(row.lights[0].rate) || 0) * (Number(row.hoursDefault) || 0);
+  else if (row.type === 'toggle' && row.default) initial += Number(row.price) || 0;
+}
+const initialTotal = from ? `${from} ${fmt(initial)}` : fmt(initial);
+---
+<div class="calc" data-from={from} data-locale={numLoc}>
+  {cfg.rows.map((row) => {
+    if (row.type === 'select') {
+      return (
+        <div class="crow">
+          <div class="cl"><div class="t">{row.label}</div>{row.sub && <div class="s">{row.sub}</div>}</div>
+          <div class="ctrl">
+            <select data-role="select" aria-label={row.label}>
+              {row.options.map((o) => <option value={o.value}>{o.label}</option>)}
+            </select>
+          </div>
+        </div>
+      );
+    }
+    if (row.type === 'lightHours') {
+      const shoot0 = (Number(row.lights[0].rate) || 0) * (Number(row.hoursDefault) || 0);
+      return (
+        <Fragment>
+          <div class="crow">
+            <div class="cl"><div class="t">{row.label}</div>{row.sub && <div class="s">{row.sub}</div>}</div>
+            <div class="ctrl">
+              <div class="seg">
+                {row.lights.map((lt, i) => (
+                  <Fragment>
+                    <input type="radio" name="light" id={`light-${i}`} data-role="light" value={lt.rate} checked={i === 0} />
+                    <label for={`light-${i}`}>{lt.label}</label>
+                  </Fragment>
+                ))}
+              </div>
+            </div>
+          </div>
+          <div class="crow" style="border-top:none;padding-top:0;">
+            <div class="cl"><div class="t">{row.hoursLabel}</div></div>
+            <div class="ctrl">
+              <div class="stepper">
+                <button type="button" data-role="h-minus" aria-label={loc.hoursLess}>−</button>
+                <input type="number" data-role="hours" value={row.hoursDefault} min={row.hoursMin} max={row.hoursMax} inputmode="numeric" aria-label={row.hoursLabel} />
+                <button type="button" data-role="h-plus" aria-label={loc.hoursMore}>+</button>
+              </div>
+              <span class="cprice on" data-role="shoot">{fmt(shoot0)}</span>
+            </div>
+          </div>
+        </Fragment>
+      );
+    }
+    if (row.type === 'toggle') {
+      return (
+        <div class="crow">
+          <div class="cl"><div class="t">{row.label}</div>{row.sub && <div class="s">{row.sub}</div>}</div>
+          <div class="ctrl">
+            <span class={row.default ? 'cprice on' : 'cprice'} data-price-for={row.key}>{row.priceLabel || fmt(row.price)}</span>
+            <label class="sw"><input type="checkbox" data-role="toggle" data-key={row.key} data-price={row.price} checked={row.default} /><span class="track"></span></label>
+          </div>
+        </div>
+      );
+    }
+    return null;
+  })}
+  <div class="total">
+    <span class="lab">{cfg.totalLabel}</span>
+    <span class="val" data-role="total">{initialTotal}</span>
+  </div>
+  {cfg.fine && <p class="fine">{cfg.fine}</p>}
+</div>

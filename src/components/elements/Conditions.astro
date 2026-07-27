@@ -1,0 +1,8 @@
+---
+const { el } = Astro.props;
+---
+<ul class="cond">
+  {el.items.map((n) => (
+    <li>{n.strong ? <Fragment><b>{n.strong}</b>{' '}{n.text}</Fragment> : n.text}</li>
+  ))}
+</ul>

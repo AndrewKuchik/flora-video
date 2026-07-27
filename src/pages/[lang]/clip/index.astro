@@ -1,0 +1,29 @@
+---
+import Base from '../../../layouts/Base.astro';
+import PageHeader from '../../../components/PageHeader.astro';
+import Section from '../../../components/Section.astro';
+import Close from '../../../components/Close.astro';
+import site from '../../../data/site.json';
+import clipRu from '../../../data/pages/clip.ru.json';
+import clipLv from '../../../data/pages/clip.lv.json';
+import clipEn from '../../../data/pages/clip.en.json';
+
+const pages = { ru: clipRu, lv: clipLv, en: clipEn };
+
+export function getStaticPaths() {
+  return [{ params: { lang: 'ru' } }, { params: { lang: 'lv' } }, { params: { lang: 'en' } }];
+}
+
+const { lang } = Astro.params;
+const page = pages[lang];
+const loc = site.locales[lang];
+const base = import.meta.env.BASE_URL;
+---
+<Base title={page.title} lang={lang}>
+  <PageHeader lang={lang} niche="clip" loc={loc} h1={page.h1} tagline={page.tagline} />
+  {page.sections.map((section, i) => (
+    <Section section={section} num={i + 1} loc={loc} />
+  ))}
+  <Close loc={loc} cta={page.close.cta} phone={site.phone} phoneHref={site.phoneHref} />
+  <script src={`${base}calc.js`} defer is:inline></script>
+</Base>
