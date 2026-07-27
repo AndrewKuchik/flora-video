@@ -208,11 +208,10 @@ ul.cond li b{color:var(--text);font-weight:600;}
 .pf{padding:32px 0 6px;}
 .pf .pf-head{max-width:700px;margin:0 auto 16px;padding:0 26px;
   font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);}
-.pf-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;
-  padding:0 clamp(14px,3vw,26px);max-width:1040px;margin:0 auto;}
-@media (min-width:720px){.pf-grid{grid-template-columns:repeat(3,1fr);}}
-.pf-grid img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:10px;display:block;
-  border:1px solid var(--line);}
+.pf-grid{columns:2;column-gap:8px;padding:0 clamp(14px,3vw,26px);max-width:1040px;margin:0 auto;}
+@media (min-width:720px){.pf-grid{columns:3;}}
+.pf-grid img{width:100%;display:block;border-radius:10px;border:1px solid var(--line);
+  margin:0 0 8px;break-inside:avoid;}
 
 /* ---------- global footer: client marquee + contacts ---------- */
 .sitefoot{border-top:1px solid var(--line);
