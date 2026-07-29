@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Flora — стеклянный цветок</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{ --ink:#EDE7DF; --muted:#9a938a; --pill-bg:rgba(255,255,255,.06); --pill-br:rgba(255,255,255,.14); --pill-on:rgba(255,255,255,.16); }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{ margin:0; background:#07070a; color:var(--ink); font-family:"Manrope",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; overflow:hidden; -webkit-tap-highlight-color:transparent; }
+  #stage{position:fixed; inset:0}
+  #gl{position:absolute; inset:0; width:100%; height:100%; display:block}
+  .cap{ position:absolute; left:0; right:0; top:max(18px,env(safe-area-inset-top)); text-align:center; pointer-events:none; z-index:2; padding:0 20px; }
+  .cap .word{ font-family:"Playfair Display",Georgia,serif; font-weight:600; letter-spacing:.02em; font-size:clamp(26px,7vw,54px); line-height:1; margin:0; text-shadow:0 2px 40px rgba(0,0,0,.5); }
+  .cap .sub{ margin:.5em 0 0; font-size:clamp(11px,3vw,14px); letter-spacing:.16em; text-transform:uppercase; color:var(--muted); }
+  .controls{ position:absolute; left:0; right:0; bottom:max(20px,env(safe-area-inset-bottom)); z-index:3; display:flex; flex-wrap:wrap; gap:8px; justify-content:center; align-items:center; padding:0 16px; }
+  .grp{display:flex; gap:6px; background:rgba(0,0,0,.25); padding:6px; border-radius:999px; border:1px solid rgba(255,255,255,.08); backdrop-filter:blur(8px)}
+  button{ font:inherit; font-size:12px; letter-spacing:.03em; color:var(--ink); background:var(--pill-bg); border:1px solid var(--pill-br); padding:9px 14px; border-radius:999px; cursor:pointer; transition:background .18s ease, transform .12s ease; white-space:nowrap; }
+  button:hover{background:var(--pill-on)}
+  button:active{transform:scale(.96)}
+  button[aria-pressed="true"]{background:var(--pill-on); border-color:rgba(255,255,255,.4)}
+  button:focus-visible{outline:2px solid #FFD65A; outline-offset:2px}
+  .hint{position:absolute; left:0; right:0; bottom:calc(max(20px,env(safe-area-inset-bottom)) + 60px); text-align:center; font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); z-index:2; pointer-events:none; opacity:.8}
+  @media (prefers-reduced-motion: reduce){ .hint{display:none} }
+</style>
+</head>
+<body>
+<div id="stage">
+  <canvas id="gl"></canvas>
+  <div class="cap">
+    <p class="word">Flora</p>
+    <p class="sub">Creative Studio · Rīga</p>
+  </div>
+  <div class="hint" id="hint">потяни / наведи — цветок повернётся к тебе</div>
+  <div class="controls">
+    <div class="grp" role="group" aria-label="Цвет стекла">
+      <button data-pal="0" aria-pressed="true">Золото → фуксия</button>
+      <button data-pal="1" aria-pressed="false">Лёд</button>
+      <button data-pal="2" aria-pressed="false">Тёплый янтарь</button>
+    </div>
+    <div class="grp" role="group" aria-label="Фон">
+      <button data-bg="0" aria-pressed="true">Тёмный</button>
+      <button data-bg="1" aria-pressed="false">Светлый</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var canvas = document.getElementById('gl');
+  var gl = canvas.getContext('webgl', {antialias:false, alpha:false, premultipliedAlpha:false});
+  if(!gl){ document.body.innerHTML = '<p style="color:#eee;font-family:sans-serif;padding:40px;text-align:center">Твой браузер не поддерживает WebGL. Открой в Safari или Chrome.</p>'; return; }
+
+  var VERT = 'attribute vec2 a; void main(){ gl_Position = vec4(a,0.0,1.0); }';
+
+  var FRAG = [
+  '#ifdef GL_FRAGMENT_PRECISION_HIGH',
+  'precision highp float;',
+  '#else',
+  'precision mediump float;',
+  '#endif',
+  'uniform vec2 uRes; uniform float uTime; uniform float uScale; uniform float uRot;',
+  'uniform vec2 uMouse; uniform int uPal; uniform int uBg;',
+  '#define TAU 6.28318530718',
+  '#define PETALS 6',
+  'mat2 rot(float a){ float c=cos(a), s=sin(a); return mat2(c,-s,s,c); }',
+  'float smin(float a,float b,float k){ float h=clamp(0.5+0.5*(b-a)/k,0.0,1.0); return mix(b,a,h)-k*h*(1.0-h); }',
+  'float sdEllipsoid(vec3 p, vec3 r){ float k0=length(p/r); float k1=length(p/(r*r)); return k0*(k0-1.0)/k1; }',
+  'float map(vec3 p){',
+  '  p /= uScale;',
+  '  float d = 1e9;',
+  '  for(int i=0;i<PETALS;i++){',
+  '    float a = float(i)/float(PETALS)*TAU + uRot;',
+  '    vec3 q = p;',
+  '    q.xz = rot(-a)*q.xz;',
+  '    q.x -= 0.52;',
+  '    q.xy = rot(0.62)*q.xy;',
+  '    float e = sdEllipsoid(q, vec3(0.60,0.085,0.28));',
+  '    d = smin(d, e, 0.16);',
+  '  }',
+  '  float center = length(p*vec3(1.0,0.85,1.0)) - 0.30;',
+  '  d = smin(d, center, 0.20);',
+  '  return d * uScale;',
+  '}',
+  'vec3 calcNormal(vec3 p){',
+  '  vec2 e = vec2(0.0012,0.0);',
+  '  return normalize(vec3(',
+  '    map(p+e.xyy)-map(p-e.xyy),',
+  '    map(p+e.yxy)-map(p-e.yxy),',
+  '    map(p+e.yyx)-map(p-e.yyx)));',
+  '}',
+  'vec3 palette(float t){',
+  '  if(uPal==1){ vec3 a=vec3(0.80,0.92,1.0); vec3 b=vec3(0.62,0.80,0.98); vec3 c=vec3(0.90,0.97,1.0); return t<0.5?mix(a,b,t*2.0):mix(b,c,(t-0.5)*2.0); }',
+  '  if(uPal==2){ vec3 a=vec3(1.0,0.86,0.42); vec3 b=vec3(0.98,0.62,0.24); vec3 c=vec3(0.86,0.42,0.14); return t<0.5?mix(a,b,t*2.0):mix(b,c,(t-0.5)*2.0); }',
+  '  vec3 gold=vec3(1.0,0.84,0.34); vec3 orange=vec3(0.98,0.53,0.22); vec3 fuchsia=vec3(0.93,0.11,0.57);',
+  '  return t<0.5?mix(gold,orange,t*2.0):mix(orange,fuchsia,(t-0.5)*2.0);',
+  '}',
+  'vec3 env(vec3 d){',
+  '  vec3 top, bot;',
+  '  if(uBg==1){ top=vec3(0.92,0.90,0.88); bot=vec3(0.74,0.73,0.75); }',
+  '  else { top=vec3(0.055,0.055,0.075); bot=vec3(0.01,0.01,0.02); }',
+  '  vec3 c = mix(bot, top, clamp(d.y*0.5+0.5,0.0,1.0));',
+  '  float key = pow(max(dot(d, normalize(vec3(0.55,0.7,0.45))),0.0), 40.0);',
+  '  c += vec3(1.0,0.96,0.88)*key*1.4;',
+  '  float rim = pow(max(dot(d, normalize(vec3(-0.6,-0.1,0.55))),0.0), 18.0);',
+  '  c += vec3(0.95,0.25,0.62)*rim*0.5;',
+  '  return c;',
+  '}',
+  'vec3 shade(vec3 p, vec3 n, vec3 rd){',
+  '  float fres = pow(1.0 - max(dot(n,-rd),0.0), 4.0);',
+  '  vec3 refl = env(reflect(rd,n));',
+  '  float rr = env(refract(rd,n,0.90)).r;',
+  '  float gg = env(refract(rd,n,0.925)).g;',
+  '  float bb = env(refract(rd,n,0.95)).b;',
+  '  vec3 refr = vec3(rr,gg,bb);',
+  '  float t = clamp(p.y*0.55+0.5 + 0.12*sin(atan(p.z,p.x)*3.0 + uRot),0.0,1.0);',
+  '  vec3 tint = palette(t);',
+  '  vec3 col = mix(refr*tint, refl, clamp(fres,0.0,1.0));',
+  '  vec3 L1 = normalize(vec3(0.55,0.85,0.5));',
+  '  vec3 h1 = normalize(L1 - rd);',
+  '  col += vec3(1.0)*pow(max(dot(n,h1),0.0),140.0)*1.6;',
+  '  vec3 L2 = normalize(vec3(-0.5,0.35,0.7));',
+  '  vec3 h2 = normalize(L2 - rd);',
+  '  col += vec3(1.0,0.6,0.85)*pow(max(dot(n,h2),0.0),90.0)*0.9;',
+  '  col += tint*fres*0.65;',
+  '  return col;',
+  '}',
+  'void main(){',
+  '  vec2 uv = (gl_FragCoord.xy - 0.5*uRes)/uRes.y;',
+  '  vec3 ro = vec3(0.0,0.14,3.25);',
+  '  vec3 ta = vec3(0.0,0.02,0.0);',
+  '  vec3 fwd = normalize(ta-ro);',
+  '  vec3 rgt = normalize(cross(vec3(0.0,1.0,0.0),fwd));',
+  '  vec3 upv = cross(fwd,rgt);',
+  '  vec3 rd = normalize(uv.x*rgt + uv.y*upv + 1.7*fwd);',
+  '  float yaw = uMouse.x*0.5; float pit = uMouse.y*0.35;',
+  '  rd.xz = rot(yaw)*rd.xz; ro.xz = rot(yaw)*ro.xz;',
+  '  rd.yz = rot(pit)*rd.yz; ro.yz = rot(pit)*ro.yz;',
+  '  float t = 0.0; float glow = 0.0; bool hit=false; vec3 p;',
+  '  for(int i=0;i<96;i++){',
+  '    p = ro + rd*t;',
+  '    float d = map(p);',
+  '    glow += 0.08/(1.0 + d*d*45.0);',
+  '    if(d < 0.0007){ hit=true; break; }',
+  '    t += d*0.9;',
+  '    if(t > 8.0) break;',
+  '  }',
+  '  vec3 col;',
+  '  if(hit){ vec3 n = calcNormal(p); col = shade(p,n,rd); }',
+  '  else { col = env(rd); }',
+  '  vec3 bloomTint = palette(0.7);',
+  '  col += bloomTint * glow * (uBg==1 ? 0.10 : 0.16);',
+  '  float vig = 1.0 - 0.35*dot(uv,uv);',
+  '  col *= clamp(vig,0.0,1.0);',
+  '  col = col/(col+vec3(1.0));',
+  '  col = pow(col, vec3(0.4545));',
+  '  gl_FragColor = vec4(col,1.0);',
+  '}'
+  ].join('\n');
+
+  function compile(type, src){
+    var s = gl.createShader(type); gl.shaderSource(s, src); gl.compileShader(s);
+    if(!gl.getShaderParameter(s, gl.COMPILE_STATUS)){ console.error(gl.getShaderInfoLog(s)); }
+    return s;
+  }
+  var prog = gl.createProgram();
+  gl.attachShader(prog, compile(gl.VERTEX_SHADER, VERT));
+  gl.attachShader(prog, compile(gl.FRAGMENT_SHADER, FRAG));
+  gl.linkProgram(prog); gl.useProgram(prog);
+
+  var buf = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 3,-1, -1,3]), gl.STATIC_DRAW);
+  var aloc = gl.getAttribLocation(prog,'a');
+  gl.enableVertexAttribArray(aloc);
+  gl.vertexAttribPointer(aloc,2,gl.FLOAT,false,0,0);
+
+  var U = {
+    res: gl.getUniformLocation(prog,'uRes'), time: gl.getUniformLocation(prog,'uTime'),
+    scale: gl.getUniformLocation(prog,'uScale'), rot: gl.getUniformLocation(prog,'uRot'),
+    mouse: gl.getUniformLocation(prog,'uMouse'), pal: gl.getUniformLocation(prog,'uPal'),
+    bg: gl.getUniformLocation(prog,'uBg')
+  };
+
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var pal = 0, bg = 0, mx = 0, my = 0, tmx = 0, tmy = 0;
+
+  function resize(){
+    var dpr = Math.min(window.devicePixelRatio||1, 1.6);
+    var w = Math.floor(canvas.clientWidth*dpr), h = Math.floor(canvas.clientHeight*dpr);
+    if(canvas.width!==w || canvas.height!==h){ canvas.width=w; canvas.height=h; gl.viewport(0,0,w,h); }
+  }
+  window.addEventListener('resize', resize);
+
+  function setPointer(cx, cy){
+    var r = canvas.getBoundingClientRect();
+    tmx = ((cx - r.left)/r.width * 2 - 1);
+    tmy = -((cy - r.top)/r.height * 2 - 1);
+  }
+  canvas.addEventListener('pointermove', function(e){ setPointer(e.clientX, e.clientY); });
+  canvas.addEventListener('pointerleave', function(){ tmx=0; tmy=0; });
+  canvas.addEventListener('touchmove', function(e){ if(e.touches[0]){ setPointer(e.touches[0].clientX, e.touches[0].clientY); } }, {passive:true});
+
+  document.querySelectorAll('[data-pal]').forEach(function(b){
+    b.addEventListener('click', function(){
+      pal = parseInt(b.getAttribute('data-pal'),10);
+      document.querySelectorAll('[data-pal]').forEach(function(x){ x.setAttribute('aria-pressed', x===b?'true':'false'); });
+      if(reduce) draw(lastT);
+    });
+  });
+  document.querySelectorAll('[data-bg]').forEach(function(b){
+    b.addEventListener('click', function(){
+      bg = parseInt(b.getAttribute('data-bg'),10);
+      document.querySelectorAll('[data-bg]').forEach(function(x){ x.setAttribute('aria-pressed', x===b?'true':'false'); });
+      document.body.style.background = bg===1 ? '#c9c7c9' : '#07070a';
+      if(reduce) draw(lastT);
+    });
+  });
+
+  var running = true;
+  document.addEventListener('visibilitychange', function(){
+    running = !document.hidden;
+    if(running && !reduce) requestAnimationFrame(loop);
+  });
+
+  var lastT = 0;
+  function draw(tSec){
+    resize();
+    mx += (tmx - mx)*0.08; my += (tmy - my)*0.08;
+    var scale = reduce ? 1.0 : (1.0 + 0.028*Math.sin(tSec*0.9));
+    var rotv = reduce ? 0.5 : tSec*0.13;
+    gl.uniform2f(U.res, canvas.width, canvas.height);
+    gl.uniform1f(U.time, tSec);
+    gl.uniform1f(U.scale, scale);
+    gl.uniform1f(U.rot, rotv);
+    gl.uniform2f(U.mouse, mx, my);
+    gl.uniform1i(U.pal, pal);
+    gl.uniform1i(U.bg, bg);
+    gl.drawArrays(gl.TRIANGLES, 0, 3);
+  }
+  function loop(now){ if(!running) return; lastT = now*0.001; draw(lastT); requestAnimationFrame(loop); }
+
+  resize();
+  if(reduce){ draw(0.0); } else { requestAnimationFrame(loop); }
+})();
+</script>
+</body>
+</html>
