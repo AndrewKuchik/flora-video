@@ -1,0 +1,19 @@
+---
+import Para from './elements/Para.astro';
+import PriceTable from './elements/PriceTable.astro';
+import Tiers from './elements/Tiers.astro';
+import Callout from './elements/Callout.astro';
+import Notes from './elements/Notes.astro';
+import Cards from './elements/Cards.astro';
+import Conditions from './elements/Conditions.astro';
+import Calculator from './elements/Calculator.astro';
+const { el, loc } = Astro.props;
+---
+{el.type === 'p' && <Para el={el} />}
+{el.type === 'priceTable' && <PriceTable el={el} />}
+{el.type === 'tiers' && <Tiers el={el} />}
+{el.type === 'callout' && <Callout el={el} />}
+{el.type === 'notes' && <Notes el={el} />}
+{el.type === 'cards' && <Cards el={el} />}
+{el.type === 'conditions' && <Conditions el={el} />}
+{el.type === 'calculator' && <Calculator el={el} loc={loc} />}

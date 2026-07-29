@@ -1,0 +1,11 @@
+---
+const { el } = Astro.props;
+---
+<div class="tiers">
+  {el.items.map((t) => (
+    <div class="tier">
+      <div class="th"><span class="tname">{t.name}</span><span class="tprice">{t.price}</span></div>
+      <p>{t.text}</p>
+    </div>
+  ))}
+</div>

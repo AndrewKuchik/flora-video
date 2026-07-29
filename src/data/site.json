@@ -1,0 +1,42 @@
+{
+  "phone": "+371 27 775 842",
+  "phoneHref": "tel:+37127775842",
+  "locales": {
+    "ru": {
+      "brand": "Flora Creative Studio · Рига",
+      "langAria": "Язык",
+      "back": "← Услуги",
+      "who": "Андрей",
+      "whoSuffix": "· Flora Creative Studio",
+      "callLabel": "Звонок или WhatsApp:",
+      "numberLocale": "ru-RU",
+      "from": "от",
+      "hoursLess": "Меньше часов",
+      "hoursMore": "Больше часов"
+    },
+    "lv": {
+      "brand": "Flora Creative Studio · Rīga",
+      "langAria": "Valoda",
+      "back": "← Pakalpojumi",
+      "who": "Andrejs",
+      "whoSuffix": "· Flora Creative Studio",
+      "callLabel": "Zvans vai WhatsApp:",
+      "numberLocale": "lv-LV",
+      "from": "no",
+      "hoursLess": "Mazāk stundu",
+      "hoursMore": "Vairāk stundu"
+    },
+    "en": {
+      "brand": "Flora Creative Studio · Riga",
+      "langAria": "Language",
+      "back": "← Services",
+      "who": "Andrey",
+      "whoSuffix": "· Flora Creative Studio",
+      "callLabel": "Call or WhatsApp:",
+      "numberLocale": "en-US",
+      "from": "from",
+      "hoursLess": "Fewer hours",
+      "hoursMore": "More hours"
+    }
+  }
+}

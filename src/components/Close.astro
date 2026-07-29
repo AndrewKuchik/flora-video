@@ -1,0 +1,12 @@
+---
+const { loc, cta, phone, phoneHref } = Astro.props;
+---
+<section class="close">
+  <div class="col">
+    <p class="cta">{cta}</p>
+    <div class="contacts">
+      <div class="who">{loc.who} <span>{loc.whoSuffix}</span></div>
+      <div>{loc.callLabel} <a href={phoneHref}>{phone}</a></div>
+    </div>
+  </div>
+</section>

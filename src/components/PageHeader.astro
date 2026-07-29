@@ -1,0 +1,26 @@
+---
+import Mark from './Mark.astro';
+const { lang, niche, loc, h1, tagline } = Astro.props;
+const base = import.meta.env.BASE_URL;
+const langs = ['ru', 'lv', 'en'];
+const backHref = `${base}${lang}/video/`;
+---
+<header class="top fx">
+  <nav class="langbar" aria-label={loc.langAria}>
+    {langs.map((l) => (
+      l === lang ? (
+        <Fragment>
+          <a href={backHref} class="back">{loc.back}</a>
+          <a href={`${base}${l}/${niche}/`} class="active">{l.toUpperCase()}</a>
+        </Fragment>
+      ) : (
+        <a href={`${base}${l}/${niche}/`}>{l.toUpperCase()}</a>
+      )
+    ))}
+  </nav>
+  <Mark />
+  <div class="brand">{loc.brand}</div>
+  <h1>{h1}</h1>
+  <div class="tagline">{tagline}</div>
+  <div class="rule"></div>
+</header>

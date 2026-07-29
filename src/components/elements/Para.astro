@@ -1,0 +1,6 @@
+---
+const { el } = Astro.props;
+---
+{el.muted
+  ? <p class="lead" style="color:var(--muted);font-size:14.5px;">{el.text}</p>
+  : <p class="lead">{el.text}</p>}
