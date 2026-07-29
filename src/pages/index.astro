@@ -3,26 +3,17 @@ import Base from '../layouts/Base.astro';
 ---
 <Base title="Flora Creative Studio" lang="en">
 
-
-<main class="chooser fx">
-  <svg class="mark" viewBox="0 0 48 48" aria-hidden="true">
-    <g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
-      <ellipse cx="24" cy="13.6" rx="4.7" ry="8.7"/>
-      <ellipse cx="24" cy="13.6" rx="4.7" ry="8.7" transform="rotate(60 24 24)"/>
-      <ellipse cx="24" cy="13.6" rx="4.7" ry="8.7" transform="rotate(120 24 24)"/>
-      <ellipse cx="24" cy="13.6" rx="4.7" ry="8.7" transform="rotate(180 24 24)"/>
-      <ellipse cx="24" cy="13.6" rx="4.7" ry="8.7" transform="rotate(240 24 24)"/>
-      <ellipse cx="24" cy="13.6" rx="4.7" ry="8.7" transform="rotate(300 24 24)"/>
-      <circle cx="24" cy="24" r="2.7"/>
-    </g>
-  </svg>
+<main class="hero fx">
+  <div class="flower-wrap"><canvas id="flower" width="480" height="480" aria-hidden="true"></canvas></div>
   <div class="brand brand-lg">Flora Creative Studio</div>
   <div class="city">Rīga</div>
-  <nav class="langs">
-    <a href="en/">English<small>EN</small></a>
-    <a href="lv/">Latviešu<small>LV</small></a>
-    <a href="ru/">Русский<small>RU</small></a>
-  </nav>
+
+  <ul class="lang-ring" id="langRing" role="listbox" aria-label="Choose language / Izvēlieties valodu / Выберите язык" data-enhance>
+    <li><a class="lang-card" role="option" href="en/" data-lang="en" data-enter="tap to enter →" aria-selected="true"><span class="big">EN</span><span class="sub">English</span></a></li>
+    <li><a class="lang-card" role="option" href="lv/" data-lang="lv" data-enter="pieskaries, lai atvērtu →" aria-selected="false"><span class="big">LV</span><span class="sub">Latviešu</span></a></li>
+    <li><a class="lang-card" role="option" href="ru/" data-lang="ru" data-enter="нажми, чтобы войти →" aria-selected="false"><span class="big">RU</span><span class="sub">Русский</span></a></li>
+  </ul>
+  <div class="enter-tag" id="enterTag" aria-hidden="true"></div>
 </main>
 
 <!--FLORA-TRUST-->
@@ -57,9 +48,6 @@ import Base from '../layouts/Base.astro';
 </section>
 <!--/FLORA-TRUST-->
 
-
-
-
 <!--FLORA-FOOT-->
 <footer class="foot-contact">
   <div class="fc-brand">Flora Creative Studio · Rīga</div>
@@ -70,5 +58,124 @@ import Base from '../layouts/Base.astro';
   </div>
 </footer>
 <!--/FLORA-FOOT-->
+
+<script is:inline>
+(function(){
+  "use strict";
+  var reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var DNA = ["#FFD65A","#FB8C3C","#EC1E93"];
+
+  /* ----- aperture-flower (canvas, light, LCP-safe) ----- */
+  var fc = document.getElementById("flower"), fctx = fc && fc.getContext("2d");
+  var DPR = Math.min(window.devicePixelRatio || 1, 2);
+  function sizeFlower(){ var r = fc.getBoundingClientRect(); fc.width = Math.max(1,Math.round(r.width*DPR)); fc.height = Math.max(1,Math.round(r.height*DPR)); }
+  function drawFlower(rot, breathe){
+    var w=fc.width, h=fc.height, cx=w/2, cy=h/2, R=Math.min(w,h)*0.42;
+    fctx.clearRect(0,0,w,h);
+    var g=fctx.createLinearGradient(cx-R,cy-R,cx+R,cy+R);
+    g.addColorStop(0,DNA[0]); g.addColorStop(0.5,DNA[1]); g.addColorStop(1,DNA[2]);
+    fctx.save(); fctx.translate(cx,cy); fctx.rotate(rot);
+    fctx.lineCap="round"; fctx.lineJoin="round"; fctx.strokeStyle=g;
+    fctx.lineWidth=Math.max(2,R*0.055); fctx.shadowColor="rgba(251,140,60,.5)"; fctx.shadowBlur=R*0.22;
+    var ry=R*(0.9+breathe*0.05), rx=R*0.30, off=R*0.52*(0.96+breathe*0.06);
+    for(var i=0;i<6;i++){ fctx.save(); fctx.rotate(i*Math.PI/3); fctx.translate(0,-off);
+      fctx.beginPath(); fctx.ellipse(0,0,rx,ry*0.5,0,0,Math.PI*2); fctx.stroke(); fctx.restore(); }
+    fctx.shadowBlur=R*0.3; fctx.beginPath(); fctx.arc(0,0,R*0.14*(1+breathe*0.12),0,Math.PI*2);
+    fctx.fillStyle=DNA[1]; fctx.globalAlpha=0.9; fctx.fill(); fctx.globalAlpha=1; fctx.restore();
+  }
+
+  /* ----- language coverflow ----- */
+  var ring=document.getElementById("langRing");
+  var cards=[].slice.call(ring.querySelectorAll(".lang-card"));
+  var N=cards.length, enterTag=document.getElementById("enterTag");
+  var pos=0, flowerRot=0, flowerTarget=0;
+  var AX=Math.min(150, window.innerWidth*0.34);
+  var CFG={depth:130,tilt:48,drop:0.30,dimTo:0.45};
+  function wrap(d){ return ((d+N+N/2)%N)-N/2; }
+  function render(){
+    for(var i=0;i<N;i++){
+      var o=wrap(i-pos), ao=Math.abs(o);
+      var s=Math.max(1-ao*CFG.drop,0.60), op=Math.max(1-ao*(1-CFG.dimTo),CFG.dimTo), c=cards[i];
+      c.style.transform="translateX("+(o*AX)+"px) translateZ("+(-ao*CFG.depth)+"px) rotateY("+(-o*CFG.tilt)+"deg) scale("+s+")";
+      c.style.opacity=op; c.style.zIndex=100-Math.round(ao*10);
+      var centered=ao<0.5;
+      c.setAttribute("data-centered", centered?"1":"0");
+      c.setAttribute("aria-selected", centered?"true":"false");
+      c.tabIndex=centered?0:-1;
+      if(centered && enterTag) enterTag.textContent=c.getAttribute("data-enter");
+    }
+    flowerTarget=pos*0.32;
+  }
+  function snap(t,animate){
+    if(animate!==false) cards.forEach(function(c){c.classList.add("snapping");});
+    pos=((t%N)+N)%N; render();
+    if(animate!==false) setTimeout(function(){cards.forEach(function(c){c.classList.remove("snapping");});},460);
+  }
+  function curIdx(){ return ((Math.round(pos)%N)+N)%N; }
+
+  function enhance(){
+    ring.classList.add("is-3d"); enterTag.classList.add("show"); render();
+    var down=null;
+    ring.addEventListener("pointerdown",function(e){
+      down={x:e.clientX,pos:pos,t:performance.now(),vx:0,lastX:e.clientX,lastT:performance.now(),moved:false};
+      ring.setPointerCapture(e.pointerId); ring.classList.add("grabbing");
+      cards.forEach(function(c){c.classList.remove("snapping");});
+    });
+    ring.addEventListener("pointermove",function(e){
+      if(!down) return;
+      var dx=e.clientX-down.x; if(Math.abs(dx)>6) down.moved=true;
+      pos=down.pos-dx/AX;
+      var now=performance.now(); down.vx=(e.clientX-down.lastX)/Math.max(1,now-down.lastT);
+      down.lastX=e.clientX; down.lastT=now; render();
+    });
+    ring.addEventListener("pointerup",function(e){
+      if(!down) return; ring.classList.remove("grabbing");
+      var dur=performance.now()-down.t;
+      if(!down.moved && dur<260){
+        var card=e.target.closest && e.target.closest(".lang-card");
+        if(card){ var i=cards.indexOf(card);
+          if(Math.abs(wrap(i-pos))<0.5){ window.location.href=card.getAttribute("href"); }
+          else { snap(i); } }
+      } else {
+        var t=Math.round(pos);
+        if(Math.abs(down.vx)>0.5) t=Math.round(down.pos)+(down.vx<0?1:-1);
+        snap(t);
+      }
+      down=null;
+    });
+    ring.addEventListener("pointercancel",function(){ down=null; ring.classList.remove("grabbing"); });
+    var wlock=false;
+    ring.addEventListener("wheel",function(e){
+      e.preventDefault(); if(wlock) return; wlock=true; setTimeout(function(){wlock=false;},300);
+      snap(Math.round(pos)+(e.deltaY>0?1:-1));
+    },{passive:false});
+    ring.addEventListener("keydown",function(e){
+      if(e.key==="ArrowRight"||e.key==="ArrowDown"){ snap(Math.round(pos)+1); e.preventDefault(); }
+      else if(e.key==="ArrowLeft"||e.key==="ArrowUp"){ snap(Math.round(pos)-1); e.preventDefault(); }
+      else if(e.key==="Enter"||e.key===" "){ window.location.href=cards[curIdx()].getAttribute("href"); e.preventDefault(); }
+    });
+    ring.tabIndex=0;
+  }
+
+  var running=false, raf=null;
+  function loop(ts){
+    var breathe=Math.sin(ts/1500)*0.5+0.5;
+    flowerRot+=(flowerTarget-flowerRot)*0.08;
+    drawFlower(flowerRot+ts/16000, breathe);
+    raf=requestAnimationFrame(loop);
+  }
+  function start(){ if(running||reduce) return; running=true; raf=requestAnimationFrame(loop); }
+  function stop(){ running=false; if(raf) cancelAnimationFrame(raf); raf=null; }
+  document.addEventListener("visibilitychange",function(){ if(document.hidden) stop(); else start(); });
+
+  function init(){
+    if(fc){ sizeFlower(); }
+    if(reduce){ if(fc) drawFlower(0,0.5); return; }
+    enhance(); start();
+    window.addEventListener("resize",function(){ AX=Math.min(150,window.innerWidth*0.34); if(fc) sizeFlower(); if(ring.classList.contains("is-3d")) render(); });
+  }
+  init();
+})();
+</script>
 
 </Base>
