@@ -14,45 +14,76 @@
   body{ margin:0; background:#07070a; color:var(--ink); font-family:"Manrope",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; overflow:hidden; -webkit-tap-highlight-color:transparent; }
   #stage{position:fixed; inset:0}
   #gl{position:absolute; inset:0; width:100%; height:100%; display:block}
-  .cap{ position:absolute; left:0; right:0; top:max(16px,env(safe-area-inset-top)); text-align:center; pointer-events:none; z-index:2; padding:0 20px; }
-  .cap .word{ font-family:"Playfair Display",Georgia,serif; font-weight:600; letter-spacing:.02em; font-size:clamp(24px,6.5vw,50px); line-height:1; margin:0; text-shadow:0 2px 40px rgba(0,0,0,.5); }
-  .cap .sub{ margin:.5em 0 0; font-size:clamp(10px,2.8vw,13px); letter-spacing:.16em; text-transform:uppercase; color:var(--muted); }
+
+  /* corner logo lockup (2.5D mark + wordmark) */
+  .brand{ position:absolute; left:max(16px,env(safe-area-inset-left)); top:max(14px,env(safe-area-inset-top)); z-index:3; display:flex; align-items:center; gap:10px; pointer-events:none; }
+  .brand svg{ width:38px; height:38px; filter:drop-shadow(0 3px 8px rgba(0,0,0,.55)); }
+  .brand .wm{ font-family:"Playfair Display",Georgia,serif; font-weight:600; font-size:24px; letter-spacing:.02em; line-height:1; }
+  .brand .wm small{ display:block; font-family:"Manrope",sans-serif; font-weight:500; font-size:8.5px; letter-spacing:.22em; text-transform:uppercase; color:var(--muted); margin-top:3px; }
+
+  /* language switcher mock */
+  .lang{ position:absolute; right:max(14px,env(safe-area-inset-right)); top:max(14px,env(safe-area-inset-top)); z-index:3; display:flex; gap:2px; background:rgba(0,0,0,.28); padding:4px; border-radius:999px; border:1px solid rgba(255,255,255,.08); backdrop-filter:blur(8px); }
+  .lang b{ font-weight:600; font-size:12px; letter-spacing:.04em; padding:5px 10px; border-radius:999px; color:var(--muted); cursor:pointer; }
+  .lang b.on{ color:var(--ink); background:var(--pill-on); }
+
   .controls{ position:absolute; left:0; right:0; bottom:max(16px,env(safe-area-inset-bottom)); z-index:3; display:flex; flex-direction:column; gap:8px; align-items:center; padding:0 12px; }
   .grp{display:flex; flex-wrap:wrap; justify-content:center; gap:6px; background:rgba(0,0,0,.28); padding:6px; border-radius:16px; border:1px solid rgba(255,255,255,.08); backdrop-filter:blur(8px); max-width:640px}
   .grp.pill{border-radius:999px}
-  button{ font:inherit; font-size:12px; letter-spacing:.02em; color:var(--ink); background:var(--pill-bg); border:1px solid var(--pill-br); padding:9px 13px; border-radius:999px; cursor:pointer; transition:background .18s ease, transform .12s ease; white-space:nowrap; }
-  button:hover{background:var(--pill-on)}
-  button:active{transform:scale(.96)}
-  button[aria-pressed="true"]{background:var(--pill-on); border-color:rgba(255,255,255,.42)}
-  button:focus-visible{outline:2px solid #FFD65A; outline-offset:2px}
+  button.ctl{ font:inherit; font-size:12px; letter-spacing:.02em; color:var(--ink); background:var(--pill-bg); border:1px solid var(--pill-br); padding:9px 13px; border-radius:999px; cursor:pointer; transition:background .18s ease, transform .12s ease; white-space:nowrap; }
+  button.ctl:hover{background:var(--pill-on)}
+  button.ctl:active{transform:scale(.96)}
+  button.ctl[aria-pressed="true"]{background:var(--pill-on); border-color:rgba(255,255,255,.42)}
+  button.ctl:focus-visible{outline:2px solid #FFD65A; outline-offset:2px}
   .lbl{font-size:9px; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); align-self:center; margin-right:2px; opacity:.7}
 </style>
 </head>
 <body>
 <div id="stage">
   <canvas id="gl"></canvas>
-  <div class="cap">
-    <p class="word">Flora</p>
-    <p class="sub">Creative Studio · Rīga</p>
+
+  <div class="brand">
+    <svg viewBox="0 0 48 48" aria-hidden="true">
+      <defs>
+        <linearGradient id="fg" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#FFD65A"/><stop offset=".5" stop-color="#FB8C3C"/><stop offset="1" stop-color="#EC1E93"/>
+        </linearGradient>
+      </defs>
+      <g fill="url(#fg)">
+        <g transform="rotate(0 24 24)"><path d="M24 6 C27 15 27 18 24 22 C21 18 21 15 24 6Z"/></g>
+        <g transform="rotate(60 24 24)"><path d="M24 6 C27 15 27 18 24 22 C21 18 21 15 24 6Z"/></g>
+        <g transform="rotate(120 24 24)"><path d="M24 6 C27 15 27 18 24 22 C21 18 21 15 24 6Z"/></g>
+        <g transform="rotate(180 24 24)"><path d="M24 6 C27 15 27 18 24 22 C21 18 21 15 24 6Z"/></g>
+        <g transform="rotate(240 24 24)"><path d="M24 6 C27 15 27 18 24 22 C21 18 21 15 24 6Z"/></g>
+        <g transform="rotate(300 24 24)"><path d="M24 6 C27 15 27 18 24 22 C21 18 21 15 24 6Z"/></g>
+      </g>
+      <circle cx="24" cy="24" r="3.4" fill="#fff" opacity=".92"/>
+      <circle cx="24" cy="24" r="20.5" fill="none" stroke="url(#fg)" stroke-width="1.6" opacity=".7"/>
+    </svg>
+    <span class="wm">Flora<small>Creative Studio · Rīga</small></span>
   </div>
+
+  <div class="lang" role="group" aria-label="Язык">
+    <b class="on">LV</b><b>RU</b><b>EN</b>
+  </div>
+
   <div class="controls">
     <div class="grp" role="group" aria-label="Модель">
       <span class="lbl">модель</span>
-      <button data-model="0" aria-pressed="true">Диафрагма</button>
-      <button data-model="1" aria-pressed="false">Кристалл</button>
-      <button data-model="2" aria-pressed="false">Лилия</button>
-      <button data-model="3" aria-pressed="false">Роза</button>
-      <button data-model="4" aria-pressed="false">Кольцо</button>
-      <button data-model="5" aria-pressed="false">Бутон</button>
+      <button class="ctl" data-model="0" aria-pressed="true">Диафрагма</button>
+      <button class="ctl" data-model="1" aria-pressed="false">Кристалл</button>
+      <button class="ctl" data-model="2" aria-pressed="false">Лилия</button>
+      <button class="ctl" data-model="3" aria-pressed="false">Роза</button>
+      <button class="ctl" data-model="4" aria-pressed="false">Кольцо</button>
+      <button class="ctl" data-model="5" aria-pressed="false">Бутон</button>
     </div>
     <div class="grp pill" role="group" aria-label="Цвет стекла">
-      <button data-pal="0" aria-pressed="true">Золото → фуксия</button>
-      <button data-pal="1" aria-pressed="false">Лёд</button>
-      <button data-pal="2" aria-pressed="false">Янтарь</button>
+      <button class="ctl" data-pal="0" aria-pressed="true">Золото → фуксия</button>
+      <button class="ctl" data-pal="1" aria-pressed="false">Лёд</button>
+      <button class="ctl" data-pal="2" aria-pressed="false">Янтарь</button>
     </div>
     <div class="grp pill" role="group" aria-label="Фон">
-      <button data-bg="0" aria-pressed="true">Тёмный</button>
-      <button data-bg="1" aria-pressed="false">Светлый</button>
+      <button class="ctl" data-bg="0" aria-pressed="true">Тёмный</button>
+      <button class="ctl" data-bg="1" aria-pressed="false">Светлый</button>
     </div>
   </div>
 </div>
@@ -79,14 +110,12 @@
   'float sdEllipsoid(vec3 p, vec3 r){ float k0=length(p/r); float k1=length(p/(r*r)); return k0*(k0-1.0)/k1; }',
   'float sdTorus(vec3 p, vec2 t){ vec2 q=vec2(length(p.xz)-t.x, p.y); return length(q)-t.y; }',
   'float sdBox(vec3 p, vec3 b){ vec3 d=abs(p)-b; return length(max(d,0.0))+min(max(d.x,max(d.y,d.z)),0.0); }',
-  // ---- models ----
   'float mIris(vec3 p){',
   '  float d = 1e9;',
   '  for(int i=0;i<6;i++){',
   '    float a = float(i)/6.0*TAU;',
-  '    vec3 q=p; q.xz = rot(-a)*q.xz; q.x -= 0.55; q.xy = rot(0.18)*q.xy;',
-  '    float blade = sdBox(q, vec3(0.42,0.045,0.17)) - 0.02;',
-  '    d = min(d, blade);',
+  '    vec3 q=p; q.xz = rot(-a)*q.xz; q.x -= 0.55; q.xy = rot(0.22)*q.xy;',
+  '    d = min(d, sdBox(q, vec3(0.42,0.045,0.17)) - 0.02);',
   '  }',
   '  return d;',
   '}',
@@ -94,10 +123,8 @@
   '  float d = length(p) - 0.62;',
   '  for(int i=0;i<8;i++){',
   '    float a = float(i)/8.0*TAU;',
-  '    vec3 n = normalize(vec3(cos(a),0.34,sin(a)));',
-  '    d = max(d, dot(p,n)-0.40);',
-  '    vec3 n2 = normalize(vec3(cos(a),-0.34,sin(a)));',
-  '    d = max(d, dot(p,n2)-0.40);',
+  '    d = max(d, dot(p, normalize(vec3(cos(a),0.34,sin(a))))-0.40);',
+  '    d = max(d, dot(p, normalize(vec3(cos(a),-0.34,sin(a))))-0.40);',
   '  }',
   '  d = max(d, dot(p,vec3(0.0,1.0,0.0))-0.52);',
   '  d = max(d, dot(p,vec3(0.0,-1.0,0.0))-0.52);',
@@ -108,20 +135,17 @@
   '  for(int i=0;i<5;i++){',
   '    float a = float(i)/5.0*TAU;',
   '    vec3 q=p; q.xz=rot(-a)*q.xz; q.x-=0.50; q.xy=rot(0.5)*q.xy;',
-  '    float e = sdEllipsoid(q, vec3(0.55,0.055,0.22));',
-  '    d = smin(d, e, 0.05);',
+  '    d = smin(d, sdEllipsoid(q, vec3(0.55,0.055,0.22)), 0.05);',
   '  }',
-  '  float c = length(p)-0.15;',
-  '  d = smin(d, c, 0.06);',
+  '  d = smin(d, length(p)-0.15, 0.06);',
   '  return d;',
   '}',
   'float mRose(vec3 p){',
-  '  float d = 1e9;',
+  '  float d = length(p) - 0.13;',
   '  for(int i=0;i<4;i++){',
   '    float fi=float(i);',
-  '    vec3 q=p; q.y -= fi*0.055; q.xz = rot(fi*0.42)*q.xz; q.yz = rot(0.12)*q.yz;',
-  '    float R = 0.50 - fi*0.11;',
-  '    d = min(d, sdTorus(q, vec2(R, 0.055)));',
+  '    vec3 q=p; q.y -= fi*0.05; q.xz = rot(fi*0.42)*q.xz; q.yz = rot(0.14)*q.yz;',
+  '    d = min(d, sdTorus(q, vec2(0.50 - fi*0.105, 0.052)));',
   '  }',
   '  return d;',
   '}',
@@ -140,6 +164,9 @@
   '  return d;',
   '}',
   'float map(vec3 p){',
+  // floating (zero-g) tumble: slow spin + gentle nod
+  '  p.xz = rot(uTurn)*p.xz;',
+  '  p.yz = rot(0.16*sin(uTime*0.5))*p.yz;',
   '  p /= uScale;',
   '  float d;',
   '  if(uModel==0) d=mIris(p);',
@@ -195,16 +222,16 @@
   '}',
   'void main(){',
   '  vec2 uv = (gl_FragCoord.xy - 0.5*uRes)/uRes.y;',
-  '  vec3 ro = vec3(0.0,0.0,3.5);',
-  '  vec3 ta = vec3(0.0,0.0,0.0);',
+  // three-quarter camera (~35 deg elevation) so we look INTO the bloom
+  '  float el = clamp(0.62 - uMouse.y*0.30, 0.18, 1.25);',
+  '  float az = uMouse.x*0.5;',
+  '  float R = 3.5;',
+  '  vec3 ro = vec3(R*cos(el)*sin(az), R*sin(el), R*cos(el)*cos(az));',
+  '  vec3 ta = vec3(0.0,-0.02,0.0);',
   '  vec3 fwd = normalize(ta-ro);',
   '  vec3 rgt = normalize(cross(vec3(0.0,1.0,0.0),fwd));',
   '  vec3 upv = cross(fwd,rgt);',
   '  vec3 rd = normalize(uv.x*rgt + uv.y*upv + 1.75*fwd);',
-  // steady turntable + subtle pointer parallax
-  '  float yaw = uTurn + uMouse.x*0.35; float pit = uMouse.y*0.22;',
-  '  rd.xz = rot(yaw)*rd.xz; ro.xz = rot(yaw)*ro.xz;',
-  '  rd.yz = rot(pit)*rd.yz; ro.yz = rot(pit)*ro.yz;',
   '  float t = 0.0; float glow = 0.0; bool hit=false; vec3 p;',
   '  for(int i=0;i<100;i++){',
   '    p = ro + rd*t;',
@@ -283,6 +310,13 @@
   wire('data-pal', function(v){ pal=v; });
   wire('data-bg', function(v){ bg=v; document.body.style.background = v===1 ? '#c9c7c9' : '#07070a'; });
 
+  // language switcher mock
+  document.querySelectorAll('.lang b').forEach(function(b){
+    b.addEventListener('click', function(){
+      document.querySelectorAll('.lang b').forEach(function(x){ x.classList.toggle('on', x===b); });
+    });
+  });
+
   var running = true;
   document.addEventListener('visibilitychange', function(){
     running = !document.hidden;
@@ -293,8 +327,8 @@
   function draw(tSec){
     resize();
     mx += (tmx - mx)*0.08; my += (tmy - my)*0.08;
-    var scale = reduce ? 1.0 : (1.0 + 0.014*Math.sin(tSec*0.8));
-    var turn = reduce ? 0.6 : tSec*0.22;
+    var scale = reduce ? 1.0 : (1.0 + 0.012*Math.sin(tSec*0.8));
+    var turn = reduce ? 0.7 : tSec*0.16;
     gl.uniform2f(U.res, canvas.width, canvas.height);
     gl.uniform1f(U.time, tSec);
     gl.uniform1f(U.scale, scale);
