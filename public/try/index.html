@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Flora — 4 варианта главной на тест</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box} body{ margin:0; background:#07070b; color:#EDE7DF; font-family:"Manrope",system-ui,sans-serif; padding:max(28px,7vw) 20px 60px; }
+  .wrap{ max-width:640px; margin:0 auto; }
+  h1{ font-family:"Playfair Display",serif; font-weight:600; font-size:clamp(28px,7vw,44px); margin:0 0 6px; }
+  .lead{ color:#948d84; margin:0 0 28px; font-size:15px; line-height:1.5; }
+  a.card{ display:block; text-decoration:none; color:#EDE7DF; border:1px solid rgba(255,255,255,.12); border-radius:16px; padding:18px 20px; margin-bottom:12px; background:rgba(255,255,255,.03); transition:background .2s,border-color .2s; }
+  a.card:hover{ background:rgba(255,255,255,.06); border-color:rgba(255,214,90,.5); }
+  a.card .t{ font-family:"Playfair Display",serif; font-weight:600; font-size:20px; display:flex; align-items:center; gap:10px; }
+  a.card .d{ color:#948d84; font-size:13.5px; line-height:1.45; margin-top:5px; }
+  .dot{ width:10px; height:10px; border-radius:50%; flex:none; }
+  .note{ color:#6f6a63; font-size:12.5px; margin-top:22px; line-height:1.5; }
+  .draft{ color:#948d84; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Flora — 4 варианта героя</h1>
+  <p class="lead">Один общий скелет (шапка, 5 разделов, липкая навигация, крупное название, speed-ramp с задержкой) — отличается только сам морф-объект. Открывай, листай медленно и быстро, сравнивай.</p>
+
+  <a class="card" href="/try-glass/"><div class="t"><span class="dot" style="background:#FFD65A"></span>Стеклянный объект</div><div class="d">Жидкое стекло с бликами и свечением, пересобирается между разделами. Макс вау, ближе всего к стеклу, что тебе понравилось.</div></a>
+  <a class="card" href="/try-displace/"><div class="t"><span class="dot" style="background:#EC1E93"></span>Кино-дисплейсмент</div><div class="d">Символ «плывёт» с искажением и цвето-сдвигом (глитч-люкс, award-site). Чёткий на остановке.</div></a>
+  <a class="card" href="/try-line/"><div class="t"><span class="dot" style="background:#5E8BFF"></span>Контур-чертёж</div><div class="d">Линия золото→фуксия рисуется и перетекает из иконки в иконку. Самое читаемое и лёгкое.</div></a>
+  <a class="card" href="/try-type/"><div class="t"><span class="dot" style="background:#A78BFA"></span>Крупный шрифт</div><div class="d">Огромное название раздела с кинетической сменой. Издательский премиум, максимум читаемости.</div></a>
+
+  <p class="note">Во всех: движение = медленно у формы → ускорение → снова медленно, с задержкой на каждом разделе и мягкой фиксацией (снап). Поддержка «меньше движения». Кнопки ведут на живые страницы разделов.<br><br>
+  <a class="draft" href="/home/">← черновик v0 (старые частицы)</a> · <a class="draft" href="/home-lab/">лаборатория частиц</a></p>
+</div>
+</body>
+</html>

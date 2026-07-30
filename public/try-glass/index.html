@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Flora — вариант «Стеклянный объект»</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="/try.css" rel="stylesheet">
+</head>
+<body>
+<script src="/try-core.js"></script>
+<script>
+FloraHero({ layer:'canvas', init:function(cv){
+  var gl=cv.getContext('webgl',{antialias:true, alpha:true, premultipliedAlpha:false});
+  if(!gl){ return function(){}; }
+  var VS='attribute vec2 a;void main(){gl_Position=vec4(a,0.,1.);}';
+  var FS=[
+  'precision highp float;',
+  'uniform sampler2D uA,uB; uniform float uMix,uSc,uTime; uniform vec3 uAcc; uniform vec2 uRes;',
+  'float cov(sampler2D t, vec2 uv){ if(uv.x<0.0||uv.x>1.0||uv.y<0.0||uv.y>1.0) return 0.0; return texture2D(t,uv).a; }',
+  'vec2 disp(vec2 tuv){ return vec2(sin(tuv.y*7.0+uTime*0.6), cos(tuv.x*7.0-uTime*0.5))*uSc*0.05; }',
+  'float field(vec2 tuv){ vec2 d=disp(tuv); return mix(cov(uA,tuv+d), cov(uB,tuv-d), uMix); }',
+  'void main(){',
+  '  vec2 uv=(gl_FragCoord.xy-0.5*uRes)/min(uRes.x,uRes.y);',
+  '  vec2 tuv=uv/0.62+0.5;',
+  '  float e=0.006;',
+  '  float c0=field(tuv);',
+  '  float gx=field(tuv+vec2(e,0.))-field(tuv-vec2(e,0.));',
+  '  float gy=field(tuv+vec2(0.,e))-field(tuv-vec2(0.,e));',
+  '  vec3 n=normalize(vec3(-gx*4.0, -gy*4.0, 0.65));',
+  '  vec3 acc=uAcc;',
+  '  float fres=pow(1.0-clamp(n.z,0.0,1.0),3.0);',
+  '  vec3 env=mix(acc*0.30, vec3(1.0,0.96,0.86), clamp(n.y*0.5+0.5,0.0,1.0));',
+  '  vec3 col=mix(acc*0.65, env, fres);',
+  '  float spec=pow(max(dot(n, normalize(vec3(0.45,0.75,0.5))),0.0), 42.0);',
+  '  col += vec3(1.0)*spec*1.4;',
+  '  float spec2=pow(max(dot(n, normalize(vec3(-0.5,0.3,0.6))),0.0), 60.0);',
+  '  col += vec3(1.0,0.6,0.85)*spec2*0.8;',
+  '  col += acc*fres*0.9;',                       // edge bloom
+  '  float al=smoothstep(0.10,0.34,c0);',
+  '  gl_FragColor=vec4(col, al);',
+  '}'].join('\n');
+  function mk(t,s){var sh=gl.createShader(t);gl.shaderSource(sh,s);gl.compileShader(sh);if(!gl.getShaderParameter(sh,gl.COMPILE_STATUS))console.error(gl.getShaderInfoLog(sh));return sh;}
+  var pr=gl.createProgram();gl.attachShader(pr,mk(gl.VERTEX_SHADER,VS));gl.attachShader(pr,mk(gl.FRAGMENT_SHADER,FS));gl.linkProgram(pr);gl.useProgram(pr);
+  var qb=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,qb);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,3,-1,-1,3]),gl.STATIC_DRAW);
+  var la=gl.getAttribLocation(pr,'a');gl.enableVertexAttribArray(la);gl.vertexAttribPointer(la,2,gl.FLOAT,false,0,0);
+  gl.enable(gl.BLEND);gl.blendFunc(gl.SRC_ALPHA,gl.ONE);gl.clearColor(0,0,0,0);
+  gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL,true);
+  var TEX=[]; for(var i=0;i<6;i++){ var t=gl.createTexture(); gl.bindTexture(gl.TEXTURE_2D,t);
+    gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE, window.FloraIconCanvas(i,256));
+    gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.LINEAR); gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE); gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE); TEX.push(t); }
+  var uA=gl.getUniformLocation(pr,'uA'),uB=gl.getUniformLocation(pr,'uB'),uMix=gl.getUniformLocation(pr,'uMix'),uSc=gl.getUniformLocation(pr,'uSc'),uTime=gl.getUniformLocation(pr,'uTime'),uAcc=gl.getUniformLocation(pr,'uAcc'),uRes=gl.getUniformLocation(pr,'uRes');
+  return function(frame){
+    var W=Math.floor(frame.w*frame.dpr),H=Math.floor(frame.h*frame.dpr);
+    if(cv.width!==W||cv.height!==H){cv.width=W;cv.height=H;gl.viewport(0,0,W,H);}
+    gl.clear(gl.COLOR_BUFFER_BIT);
+    gl.activeTexture(gl.TEXTURE0);gl.bindTexture(gl.TEXTURE_2D,TEX[frame.a]);gl.uniform1i(uA,0);
+    gl.activeTexture(gl.TEXTURE1);gl.bindTexture(gl.TEXTURE_2D,TEX[frame.b]);gl.uniform1i(uB,1);
+    gl.uniform1f(uMix,frame.mt);gl.uniform1f(uSc,frame.sc);gl.uniform1f(uTime,frame.time);
+    gl.uniform3f(uAcc,frame.ac[0]/255,frame.ac[1]/255,frame.ac[2]/255);gl.uniform2f(uRes,W,H);
+    gl.drawArrays(gl.TRIANGLES,0,3);
+  };
+}});
+</script>
+</body>
+</html>
