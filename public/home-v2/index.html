@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Flora — v0+ (частицы, узнаваемые формы, разные сборки)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="/try.css" rel="stylesheet">
+</head>
+<body>
+<script src="/try-core.js"></script>
+<script>
+FloraHero({ layer:'canvas', init:function(cv){
+  var gl=cv.getContext('webgl',{antialias:true, alpha:true, premultipliedAlpha:false});
+  if(!gl){ return function(){}; }
+  var mobile=window.matchMedia('(max-width:820px)').matches||('ontouchstart' in window);
+  var M = mobile? 1900 : 2800;
+
+  // ---- sample recognizable service icons into points (fill body + edge silhouette) ----
+  var S=240, oc=document.createElement('canvas'); oc.width=oc.height=S; var c=oc.getContext('2d');
+  function prep(mode){ c.clearRect(0,0,S,S); c.save(); c.translate(S/2,S/2); c.scale(S/210,S/210);
+    c.fillStyle='#fff'; c.strokeStyle='#fff'; c.lineJoin='round'; c.lineCap='round'; c.lineWidth=8; window.FLORA_ICONS[cur](c,mode); c.restore(); }
+  var cur=0;
+  function shuffle(a){ for(var i=a.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t; } return a; }
+  function fillPts(){ prep('fill'); var d=c.getImageData(0,0,S,S).data,p=[]; for(var y=0;y<S;y+=3)for(var x=0;x<S;x+=3){ if(d[(y*S+x)*4+3]>110) p.push([(x-S/2)/(S/2)*0.92,-(y-S/2)/(S/2)*0.92]); } return shuffle(p); }
+  function edgePts(){ prep('stroke'); var d=c.getImageData(0,0,S,S).data; function A(x,y){return (x<0||y<0||x>=S||y>=S)?0:d[(y*S+x)*4+3];} var p=[]; for(var y=0;y<S;y+=2)for(var x=0;x<S;x+=2){ if(A(x,y)>110) p.push([(x-S/2)/(S/2)*0.92,-(y-S/2)/(S/2)*0.92]); } return shuffle(p); }
+  function fit(fill,edge){ var out=new Float32Array(M*2), ne=Math.floor(M*0.4), nf=M-ne;
+    for(var i=0;i<nf;i++){ var q=fill[i%fill.length]; out[i*2]=q[0]+(Math.random()-0.5)*0.012; out[i*2+1]=q[1]+(Math.random()-0.5)*0.012; }
+    for(var j=0;j<ne;j++){ var q2=edge[j%edge.length]; out[(nf+j)*2]=q2[0]; out[(nf+j)*2+1]=q2[1]; } return out; }
+  var SHAPES=[]; for(cur=0;cur<6;cur++){ SHAPES.push(fit(fillPts(),edgePts())); }
+
+  var DIR=new Float32Array(M*2), BR=new Float32Array(M), RND=new Float32Array(M);
+  for(var i=0;i<M;i++){ var a=Math.random()*6.283; DIR[i*2]=Math.cos(a); DIR[i*2+1]=Math.sin(a); BR[i]=0.45+Math.random()*0.55; RND[i]=Math.random(); }
+
+  var VS='attribute vec2 p;attribute float b;uniform float uSize,uAspect;varying float vb;void main(){vb=b;gl_Position=vec4(p.x*uAspect,p.y,0.,1.);gl_PointSize=uSize*(0.5+0.8*b);}';
+  var FS='precision mediump float;uniform vec3 uC;uniform float uA;varying float vb;void main(){float d=length(gl_PointCoord-0.5);if(d>0.5)discard;float a=smoothstep(0.5,0.0,d);gl_FragColor=vec4(uC*(0.7+0.5*vb),a*uA);}';
+  function mk(t,s){var sh=gl.createShader(t);gl.shaderSource(sh,s);gl.compileShader(sh);return sh;}
+  var pr=gl.createProgram();gl.attachShader(pr,mk(gl.VERTEX_SHADER,VS));gl.attachShader(pr,mk(gl.FRAGMENT_SHADER,FS));gl.linkProgram(pr);gl.useProgram(pr);
+  var pos=new Float32Array(M*2);
+  var pb=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,pb);gl.bufferData(gl.ARRAY_BUFFER,pos,gl.DYNAMIC_DRAW);
+  var lp=gl.getAttribLocation(pr,'p');gl.enableVertexAttribArray(lp);gl.vertexAttribPointer(lp,2,gl.FLOAT,false,0,0);
+  var bb=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,bb);gl.bufferData(gl.ARRAY_BUFFER,BR,gl.STATIC_DRAW);
+  var lb=gl.getAttribLocation(pr,'b');gl.enableVertexAttribArray(lb);gl.vertexAttribPointer(lb,1,gl.FLOAT,false,0,0);
+  gl.enable(gl.BLEND);gl.blendFunc(gl.SRC_ALPHA,gl.ONE);gl.clearColor(0,0,0,0);
+  var uSize=gl.getUniformLocation(pr,'uSize'),uAspect=gl.getUniformLocation(pr,'uAspect'),uC=gl.getUniformLocation(pr,'uC'),uA=gl.getUniformLocation(pr,'uA');
+
+  var tmx=0,tmy=0,mx=0,my=0;
+  window.addEventListener('pointermove',function(e){tmx=e.clientX/window.innerWidth*2-1;tmy=-(e.clientY/window.innerHeight*2-1);});
+  window.addEventListener('touchmove',function(e){if(e.touches[0]){tmx=e.touches[0].clientX/window.innerWidth*2-1;tmy=-(e.touches[0].clientY/window.innerHeight*2-1);}},{passive:true});
+
+  cv.style.opacity=0; cv.style.transition='opacity .9s ease'; var shown=false;
+
+  // different assembly field per outgoing section a
+  function field(a,x,y,i,sc){
+    var r=RND[i];
+    if(a===0){ return [DIR[i*2]*sc*0.95, DIR[i*2+1]*sc*0.95]; }            // explode radial
+    if(a===1){ var ang=sc*2.6*(0.5+r), ca=Math.cos(ang),sa=Math.sin(ang); return [x*ca-y*sa-x, x*sa+y*ca-y]; } // vortex
+    if(a===2){ return [(r-0.5)*sc*0.5, sc*(1.4)*(0.4+r)]; }                 // rain from top (offset +y)
+    if(a===3){ return [ (x>0?1:-1)*sc*0.9*(0.4+r), (y>0?1:-1)*sc*0.9*(0.4+r) ]; } // to the edges
+    var ang2=sc*3.4*(0.3+r), rad=sc*0.5; return [Math.cos(ang2+i)*rad, Math.sin(ang2+i)*rad]; // spiral
+  }
+
+  return function(frame){
+    var W=Math.floor(frame.w*frame.dpr),H=Math.floor(frame.h*frame.dpr);
+    if(cv.width!==W||cv.height!==H){cv.width=W;cv.height=H;gl.viewport(0,0,W,H);}
+    mx+=(tmx-mx)*0.05; my+=(tmy-my)*0.05;
+    var a=frame.a,b=frame.b,mt=frame.mt,sc=frame.sc,t=frame.time;
+    var A=SHAPES[a],B=SHAPES[b];
+    var breathe=1+0.02*Math.sin(t*1.1)*(1-sc);
+    for(var i=0;i<M;i++){ var ix=i*2,iy=ix+1;
+      var x=(A[ix]+(B[ix]-A[ix])*mt)*breathe, y=(A[iy]+(B[iy]-A[iy])*mt)*breathe;
+      var f=field(a,x,y,i,sc);
+      pos[ix]=x+f[0]+mx*0.05; pos[iy]=y+f[1]+my*0.05;
+    }
+    gl.bindBuffer(gl.ARRAY_BUFFER,pb); gl.bufferSubData(gl.ARRAY_BUFFER,0,pos);
+    gl.clear(gl.COLOR_BUFFER_BIT);
+    var base=Math.min(W,H)*(mobile?0.0034:0.0030);
+    gl.uniform1f(uSize, base); gl.uniform1f(uAspect, H/W);
+    gl.uniform3f(uC, frame.ac[0]/255, frame.ac[1]/255, frame.ac[2]/255);
+    gl.uniform1f(uA, 0.5*(1-0.35*sc));   // controlled — no white blowout
+    gl.drawArrays(gl.POINTS,0,M);
+    if(!shown){ shown=true; cv.style.opacity=1; }
+  };
+}});
+</script>
+</body>
+</html>
