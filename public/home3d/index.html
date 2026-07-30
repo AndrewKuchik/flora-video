@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Flora — главная 3D (per-section, разные переходы)</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="/try.css" rel="stylesheet">
+<style>
+  #stage{ opacity:0; transition:opacity 1s ease; }
+  .lab{ position:fixed; z-index:6; left:0; right:0; bottom:calc(14px + env(safe-area-inset-bottom)); display:flex; justify-content:center; }
+  .lab .grp{ display:flex; align-items:center; gap:6px; background:rgba(0,0,0,.42); border:1px solid rgba(255,255,255,.1); border-radius:999px; padding:6px; backdrop-filter:blur(10px); }
+  .lab .lbl{ font-size:9px; letter-spacing:.14em; text-transform:uppercase; color:#948d84; padding:0 4px; }
+  .lab button{ font:inherit; font-size:12px; font-weight:600; color:#EDE7DF; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12); padding:8px 12px; border-radius:999px; cursor:pointer; }
+  .lab button[aria-pressed="true"]{ background:rgba(var(--ac),.24); border-color:rgba(var(--ac),.6); }
+  .scrollhint{ bottom:calc(62px + env(safe-area-inset-bottom)); }
+</style>
+</head>
+<body>
+<div class="tint"></div>
+<canvas id="stage"></canvas>
+<div class="grain"></div>
+
+<header class="bar">
+  <a class="brand" href="#s0"><svg viewBox="0 0 48 48" aria-hidden="true"><defs><linearGradient id="fgc" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFD65A"/><stop offset=".5" stop-color="#FB8C3C"/><stop offset="1" stop-color="#EC1E93"/></linearGradient></defs><g fill="url(#fgc)"><g transform="rotate(0 24 24)"><path d="M24 6 C27 15 27 18 24 22 C21 18 21 15 24 6Z"/></g><g transform="rotate(60 24 24)"><path d="M24 6 C27 15 27 18 24 22 C21 18 21 15 24 6Z"/></g><g transform="rotate(120 24 24)"><path d="M24 6 C27 15 27 18 24 22 C21 18 21 15 24 6Z"/></g><g transform="rotate(180 24 24)"><path d="M24 6 C27 15 27 18 24 22 C21 18 21 15 24 6Z"/></g><g transform="rotate(240 24 24)"><path d="M24 6 C27 15 27 18 24 22 C21 18 21 15 24 6Z"/></g><g transform="rotate(300 24 24)"><path d="M24 6 C27 15 27 18 24 22 C21 18 21 15 24 6Z"/></g></g><circle cx="24" cy="24" r="3.2" fill="#fff" opacity=".92"/><circle cx="24" cy="24" r="20.5" fill="none" stroke="url(#fgc)" stroke-width="1.5" opacity=".7"/></svg><span class="wm">Flora</span></a>
+  <nav class="sec" id="nav"><a href="#s1">Видео</a><a href="#s2">Аудио</a><a href="#s3">Фото</a><a href="#s4">Бизнесу</a><a href="#s5">Игры</a></nav>
+  <div class="lang"><b class="on">LV</b><b>RU</b><b>EN</b></div>
+</header>
+
+<main>
+  <section class="st" id="s0"><p class="eyebrow">Creative Studio · Rīga</p><h1 class="word">Flora</h1><p class="sub">Звук, видео и кадр под одной крышей. Листай вниз.</p></section>
+  <section class="st" id="s1"><p class="eyebrow">01 · Видео</p><h2 class="word">Видео</h2><p class="sub">Клипы, реклама, мероприятия, контент для соцсетей.</p><a class="cta" href="/ru/video/">Посчитать цену</a></section>
+  <section class="st" id="s2"><p class="eyebrow">02 · Аудио</p><h2 class="word">Аудио</h2><p class="sub">Запись, сведение и мастеринг, уроки, аренда студии.</p><a class="cta" href="/ru/audio/">Посчитать цену</a></section>
+  <section class="st" id="s3"><p class="eyebrow">03 · Фото</p><h2 class="word">Фото</h2><p class="sub">Свадьбы, мероприятия, реклама и предметка, портреты.</p><a class="cta" href="/ru/photo/">Посчитать цену</a></section>
+  <section class="st" id="s4"><p class="eyebrow">04 · Бизнесу</p><h2 class="word">Бизнесу</h2><p class="sub">Фото + видео сопровождение мероприятий под ключ.</p><a class="cta" href="/ru/corporate/">Смотреть форматы</a></section>
+  <section class="st" id="s5"><p class="eyebrow">05 · Игры и приложения</p><h2 class="word">Игры и приложения</h2><p class="sub">HTML-игры и приложения для брендов. От 2000 €.</p><a class="cta ghost" href="/ru/dev/">Обсудить проект</a></section>
+</main>
+<footer class="foot">+371 27 775 842 · <a href="mailto:info@florasoundrecords.lv">info@florasoundrecords.lv</a> · Rīga</footer>
+<div class="scrollhint" id="hint">листай вниз ↓</div>
+<div class="lab"><div class="grp"><span class="lbl">материал</span>
+  <button data-m="0" aria-pressed="true">Стекло</button>
+  <button data-m="1" aria-pressed="false">Хром</button>
+  <button data-m="2" aria-pressed="false">Контур</button>
+</div></div>
+
+<!-- scroll driver (classic, runs immediately so the page has context before three.js loads) -->
+<script>
+(function(){
+  var AC=[[255,198,75],[227,170,82],[94,139,255],[227,154,165],[216,178,122],[167,139,250]], N=6;
+  var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var root=document.documentElement, nav=document.getElementById('nav').querySelectorAll('a'), hint=document.getElementById('hint'), last='';
+  function ramp(f){ return f<0.5?0.5*Math.pow(f*2,3):1-0.5*Math.pow((1-f)*2,3); }
+  function lerp(a,b,t){ return a+(b-a)*t; }
+  window.__frame={a:0,b:0,mt:0,sc:0,ac:AC[0],reduce:reduce,mat:0};
+  function tick(){
+    var vh=window.innerHeight||1, y=window.scrollY||window.pageYOffset||0;
+    var s=Math.max(0,Math.min(N-1,y/vh)), a=Math.floor(s), b=Math.min(N-1,a+1), f=s-a;
+    var mt=reduce?(f<0.5?0:1):ramp(f), sc=reduce?0:Math.sin(Math.PI*f);
+    var ac=[Math.round(lerp(AC[a][0],AC[b][0],mt)),Math.round(lerp(AC[a][1],AC[b][1],mt)),Math.round(lerp(AC[a][2],AC[b][2],mt))];
+    var fr=window.__frame; fr.a=a;fr.b=b;fr.mt=mt;fr.sc=sc;fr.ac=ac;
+    var accS=ac.join(','); if(accS!==last){ root.style.setProperty('--ac',accS); last=accS; }
+    var cur=Math.round(s); for(var k=0;k<nav.length;k++) nav[k].classList.toggle('on',(k+1)===cur);
+    hint.style.opacity=s>0.4?'0':'';
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+  document.querySelectorAll('.lab button').forEach(function(b){ b.addEventListener('click',function(){ window.__frame.mat=+b.getAttribute('data-m'); document.querySelectorAll('.lab button').forEach(function(x){ x.setAttribute('aria-pressed', x===b?'true':'false'); }); }); });
+  document.querySelectorAll('.lang b').forEach(function(b){ b.addEventListener('click',function(){ document.querySelectorAll('.lang b').forEach(function(x){ x.classList.toggle('on',x===b); }); }); });
+})();
+</script>
+
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+}}
+</script>
+<script type="module">
+import * as THREE from 'three';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
+import { RectAreaLightUniformsLib } from 'three/addons/lights/RectAreaLightUniformsLib.js';
+
+try {
+  const canvas=document.getElementById('stage');
+  const mobile=window.matchMedia('(max-width: 820px)').matches || ('ontouchstart' in window);
+  const DPR=mobile?1.2:1.6, FPS=mobile?30:60, reduce=window.__frame.reduce;
+  const renderer=new THREE.WebGLRenderer({canvas, antialias:true, alpha:true, powerPreference:'high-performance'});
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,DPR));
+  renderer.toneMapping=THREE.ACESFilmicToneMapping; renderer.toneMappingExposure=1.15; renderer.outputColorSpace=THREE.SRGBColorSpace;
+  const scene=new THREE.Scene();
+  const camera=new THREE.PerspectiveCamera(35,1,0.1,100); camera.position.set(0,0,6.6);
+  const pmrem=new THREE.PMREMGenerator(renderer); scene.environment=pmrem.fromScene(new RoomEnvironment(),0.04).texture;
+  RectAreaLightUniformsLib.init();
+  const l1=new THREE.RectAreaLight(0xFFD65A,5,6,6); l1.position.set(-4,3,3); l1.lookAt(0,0,0); scene.add(l1);
+  const l2=new THREE.RectAreaLight(0xEC1E93,3.6,6,6); l2.position.set(4,-3,2); l2.lookAt(0,0,0); scene.add(l2);
+  scene.add(new THREE.AmbientLight(0xffffff,0.18));
+
+  const geos=[
+    new THREE.IcosahedronGeometry(1.55,1),
+    new RoundedBoxGeometry(2.4,1.5,1.5,6,0.34),
+    new THREE.TorusGeometry(1.15,0.42,20,64),
+    new THREE.CylinderGeometry(1.15,1.15,0.85,44),
+    new RoundedBoxGeometry(2.0,1.5,1.2,6,0.26),
+    new THREE.DodecahedronGeometry(1.5,0)
+  ];
+  function glassMat(){ return new THREE.MeshPhysicalMaterial({ metalness:0, roughness:0.05, clearcoat:1, clearcoatRoughness:0.06, envMapIntensity:1.7, iridescence:0.4, iridescenceIOR:1.3, color:0xdfe6ff, transparent:true, opacity:0.85, flatShading:true }); }
+  const groups=[], crystals=[], cores=[];
+  for(let i=0;i<6;i++){ const g=new THREE.Group(); const m=glassMat();
+    const cr=new THREE.Mesh(geos[i],m); if(i===3) cr.rotation.x=Math.PI/2; g.add(cr);
+    const core=new THREE.Mesh(new THREE.IcosahedronGeometry(0.55,1), new THREE.MeshStandardMaterial({color:0xFFB24B,emissive:0xFB8C3C,emissiveIntensity:2.4,roughness:0.5,flatShading:true}));
+    g.add(core); g.visible=false; scene.add(g); groups.push(g); crystals.push(cr); cores.push(core); }
+
+  let composer,bloom;
+  function build(w,h){ composer=new EffectComposer(renderer); composer.addPass(new RenderPass(scene,camera));
+    bloom=new UnrealBloomPass(new THREE.Vector2(Math.max(2,w*0.5),Math.max(2,h*0.5)),0.7,0.5,0.85); composer.addPass(bloom); composer.addPass(new OutputPass()); }
+  function resize(){ const w=canvas.clientWidth,h=canvas.clientHeight,dpr=Math.min(window.devicePixelRatio||1,DPR);
+    renderer.setPixelRatio(dpr); renderer.setSize(w,h,false); camera.aspect=w/h; camera.updateProjectionMatrix();
+    if(!composer) build(w*dpr,h*dpr); else composer.setSize(w*dpr,h*dpr); }
+  window.addEventListener('resize',resize); resize();
+
+  let tx=0,ty=0,cx=0,cy=0;
+  window.addEventListener('pointermove',e=>{tx=(e.clientX/window.innerWidth*2-1);ty=(e.clientY/window.innerHeight*2-1);});
+  window.addEventListener('touchmove',e=>{if(e.touches[0]){tx=(e.touches[0].clientX/window.innerWidth*2-1);ty=(e.touches[0].clientY/window.innerHeight*2-1);}},{passive:true});
+
+  function setOpacity(g,o){ g.children.forEach(c=>{ c.material.opacity = c===g.children[1] ? o : o*0.85; c.material.transparent=true; }); }
+  function base(g,ry,rx){ g.position.set(0,0,0); g.scale.setScalar(1); g.rotation.set(rx,ry,0); setOpacity(g,1); }
+
+  // 5 different transitions, indexed by the outgoing section a
+  function transition(a,gA,gB,mt,sc,ry,rx){
+    if(a===0){ // burst outward
+      gA.scale.setScalar(1+sc*0.6); gA.rotation.y=ry+sc*2.0; gA.position.z=sc*1.2; setOpacity(gA,1-mt);
+      gB.scale.setScalar(mt); gB.rotation.y=ry-(1-mt)*3; setOpacity(gB,mt);
+    } else if(a===1){ // horizontal spin-swap
+      gA.position.x=-mt*4.2; gA.rotation.y=ry+mt*4; gA.scale.setScalar(1-mt*0.35); setOpacity(gA,1-mt);
+      gB.position.x=(1-mt)*4.2; gB.rotation.y=ry-(1-mt)*4; gB.scale.setScalar(0.65+mt*0.35); setOpacity(gB,mt);
+    } else if(a===2){ // vertical flip
+      gA.rotation.x=rx+mt*Math.PI; setOpacity(gA, mt<0.5?1-mt*1.6:0); gA.scale.setScalar(1-mt*0.15);
+      gB.rotation.x=rx-(1-mt)*Math.PI; setOpacity(gB, mt>0.5?(mt-0.5)*2:0); gB.scale.setScalar(0.85+mt*0.15);
+    } else if(a===3){ // dissolve + core burst
+      gA.scale.setScalar(1-mt); setOpacity(gA,1-mt); cores[a].material.emissiveIntensity=2.4+sc*6;
+      gB.scale.setScalar(mt); gB.rotation.y=ry+(1-mt)*2; setOpacity(gB,mt);
+    } else { // depth fly-through
+      gA.position.z=mt*4.5; gA.rotation.y=ry+mt*1.5; setOpacity(gA,1-mt);
+      gB.position.z=-(1-mt)*4.5; gB.rotation.y=ry; setOpacity(gB,mt);
+    }
+  }
+
+  const presets=[
+    {metalness:0,roughness:0.05,wireframe:false,opacity:0.85,color:0xdfe6ff,clearcoat:1},
+    {metalness:1,roughness:0.04,wireframe:false,opacity:1.0,color:0xffffff,clearcoat:0.5},
+    {metalness:0,roughness:0.6,wireframe:true,opacity:0.9,color:0xffffff,clearcoat:0}
+  ];
+  let curMat=-1;
+  function applyMat(m){ const p=presets[m]; crystals.forEach(cr=>{ const mm=cr.material; mm.metalness=p.metalness; mm.roughness=p.roughness; mm.wireframe=p.wireframe; mm.opacity=p.opacity; mm.color.set(p.color); mm.clearcoat=p.clearcoat; mm.needsUpdate=true; }); cores.forEach(c=>c.visible=(m!==2)); }
+
+  let revealed=false; const interval=1000/FPS; let lastT=0;
+  function frame(t){
+    requestAnimationFrame(frame);
+    if(t-lastT<interval) return; lastT=t;
+    const fr=window.__frame; if(fr.mat!==curMat){ curMat=fr.mat; applyMat(curMat); }
+    cx+=(tx-cx)*0.05; cy+=(ty-cy)*0.05;
+    const ry=(reduce?0.5:t*0.00013)+cx*0.5, rx=-0.12+cy*0.35;
+    groups.forEach(g=>g.visible=false);
+    const a=fr.a,b=fr.b; groups[a].visible=true; groups[b].visible=true;
+    base(groups[a],ry,rx); base(groups[b],ry,rx);
+    if(a!==b) transition(a,groups[a],groups[b],fr.mt,fr.sc,ry,rx);
+    if(a===3) cores[3].material.emissiveIntensity=2.4; // reset when not transitioning handled above
+    const cc=new THREE.Color(fr.ac[0]/255,fr.ac[1]/255,fr.ac[2]/255);
+    cores[a].material.emissive.copy(cc); cores[b].material.emissive.copy(cc);
+    composer.render();
+    if(!revealed){ revealed=true; canvas.style.opacity=1; }
+  }
+  requestAnimationFrame(frame);
+} catch(err){ console.error(err); document.getElementById('stage').style.opacity=0; }
+</script>
+</body>
+</html>
