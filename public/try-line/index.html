@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Flora — вариант «Контур-чертёж»</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="/try.css" rel="stylesheet">
+</head>
+<body>
+<script src="/try-core.js"></script>
+<script>
+FloraHero({ layer:'canvas', init:function(cv, ctx){
+  var c=cv.getContext('2d'); var ICONS=window.FLORA_ICONS; var DASH=2400;
+  function icon(i,m){ ICONS[i](c,m); }
+  return function(frame){
+    var w=frame.w, h=frame.h, dpr=frame.dpr;
+    if(cv.width!==Math.floor(w*dpr)||cv.height!==Math.floor(h*dpr)){ cv.width=Math.floor(w*dpr); cv.height=Math.floor(h*dpr); }
+    c.setTransform(1,0,0,1,0,0); c.clearRect(0,0,cv.width,cv.height);
+    var scale = Math.min(w,h)/dpr; // base
+    var S = Math.min(w,h)*dpr*0.0026 + 0.0; // scale factor
+    S = Math.min(w,h)*dpr/ (Math.min(w,h)) ; // = dpr
+    // center + fit: icon box ~180 units -> target ~ 42% of min side
+    var fit = (Math.min(w,h)*dpr*0.42)/180;
+    c.setTransform(fit,0,0,fit, cv.width/2, cv.height*0.44);
+    c.lineJoin='round'; c.lineCap='round'; c.lineWidth = 3/fit;
+    var acc='rgb('+frame.ac[0]+','+frame.ac[1]+','+frame.ac[2]+')';
+    c.strokeStyle=acc; c.shadowColor=acc; c.shadowBlur=18/fit;
+    var mt=frame.mt, a=frame.a, b=frame.b;
+    // outgoing icon a: un-draws as mt 0->1
+    if(mt<0.999){ c.save(); c.globalAlpha=(1-mt); c.setLineDash([DASH]); c.lineDashOffset=DASH*mt; icon(a,'stroke'); c.restore(); }
+    // incoming icon b: draws in as mt 0->1
+    if(mt>0.001){ c.save(); c.globalAlpha=Math.min(1,mt*1.25); c.setLineDash([DASH]); c.lineDashOffset=DASH*(1-mt); icon(b,'stroke'); c.restore(); }
+  };
+}});
+</script>
+</body>
+</html>

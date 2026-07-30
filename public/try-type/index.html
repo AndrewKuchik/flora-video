@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Flora — вариант «Крупный шрифт»</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="/try.css" rel="stylesheet">
+<style>
+  #stage{ display:flex; align-items:center; justify-content:center; }
+  .bigwrap{ position:relative; width:100%; height:46vh; }
+  .bigword{ position:absolute; inset:0; display:flex; align-items:center; justify-content:center; will-change:transform,opacity,filter;
+    font-family:"Playfair Display",Georgia,serif; font-weight:600; font-size:clamp(44px,15vw,150px); line-height:.95; letter-spacing:-.01em;
+    color:rgb(var(--ac)); text-shadow:0 6px 60px rgba(0,0,0,.6); padding:0 5vw; text-align:center; text-wrap:balance; }
+</style>
+</head>
+<body>
+<script src="/try-core.js"></script>
+<script>
+FloraHero({ layer:'div', hideWord:true, init:function(stage){
+  var SEC=window.FLORA_SECTIONS;
+  stage.innerHTML='<div class="bigwrap"><div class="bigword" id="w0"></div><div class="bigword" id="w1"></div></div>';
+  var w0=document.getElementById('w0'), w1=document.getElementById('w1');
+  return function(frame){
+    var a=frame.a, b=frame.b, mt=frame.mt;
+    w0.textContent=SEC[a].word; w1.textContent=SEC[b].word;
+    w0.style.opacity=(1-mt); w0.style.transform='translateY('+(-mt*46)+'px) scale('+(1-mt*0.06)+')'; w0.style.filter='blur('+(mt*7)+'px)';
+    w1.style.opacity=mt; w1.style.transform='translateY('+((1-mt)*46)+'px) scale('+(0.94+mt*0.06)+')'; w1.style.filter='blur('+((1-mt)*7)+'px)';
+  };
+}});
+</script>
+</body>
+</html>
