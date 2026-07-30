@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Flora — вариант A (орбита услуг)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#08080c; --ink:#EDE7DF; --muted:#948d84; --panel-br:rgba(255,255,255,.12);
+    --video:#E3AA52; --audio:#5E8BFF; --photo:#E39AA5; --corp:#D8B27A; --dev:#A78BFA;
+  }
+  *{box-sizing:border-box}
+  body{ margin:0; background:var(--bg); color:var(--ink); font-family:"Manrope",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; -webkit-tap-highlight-color:transparent; overflow-x:hidden; min-height:100svh; display:flex; flex-direction:column; }
+  body::after{ content:""; position:fixed; inset:0; z-index:1; pointer-events:none; opacity:.05; mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+
+  header.bar{ position:relative; z-index:10; display:flex; align-items:center; justify-content:space-between; padding:14px max(16px,env(safe-area-inset-left)); }
+  .brand{ display:flex; align-items:center; gap:10px; }
+  .brand svg{ width:34px; height:34px; filter:drop-shadow(0 3px 8px rgba(0,0,0,.55)); }
+  .brand .wm{ font-family:"Playfair Display",Georgia,serif; font-weight:600; font-size:22px; letter-spacing:.02em; }
+  .lang{ display:flex; gap:2px; background:rgba(0,0,0,.3); padding:4px; border-radius:999px; border:1px solid var(--panel-br); }
+  .lang b{ font-weight:600; font-size:12px; padding:5px 10px; border-radius:999px; color:var(--muted); cursor:pointer; }
+  .lang b.on{ color:var(--ink); background:rgba(255,255,255,.14); }
+
+  .lede{ position:relative; z-index:2; text-align:center; padding:8px 20px 0; }
+  .lede h1{ font-family:"Playfair Display",serif; font-weight:600; font-size:clamp(24px,5.5vw,44px); margin:0; text-wrap:balance; }
+  .lede p{ margin:.5em 0 0; color:var(--muted); font-size:clamp(12px,3vw,15px); }
+
+  .orbit{ position:relative; z-index:2; flex:1; min-height:60svh; perspective:1100px; touch-action:pan-y; }
+  .ring{ position:absolute; left:50%; top:54%; width:0; height:0; transform-style:preserve-3d; transform:rotateY(var(--rot,0deg)); transition:transform .55s cubic-bezier(.22,.61,.36,1); }
+  .ring.drag{ transition:none; }
+  .card{ --cw:210px; --ch:256px; --R:300px;
+    position:absolute; width:var(--cw); height:var(--ch); left:calc(var(--cw) / -2); top:calc(var(--ch) / -2);
+    transform:rotateY(calc(var(--i) * 72deg)) translateZ(var(--R)); backface-visibility:hidden;
+    display:flex; flex-direction:column; gap:10px; padding:22px 20px; border-radius:20px; text-decoration:none; color:var(--ink);
+    background:linear-gradient(160deg, rgba(255,255,255,.11), rgba(255,255,255,.03));
+    border:1px solid var(--panel-br); box-shadow:0 20px 60px rgba(0,0,0,.5);
+    backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+    filter:brightness(.62) saturate(.85); transition:filter .45s ease, box-shadow .45s ease, border-color .45s ease; }
+  .card::before{ content:""; position:absolute; inset:0; border-radius:20px; pointer-events:none;
+    background:linear-gradient(160deg, rgba(255,255,255,.28), transparent 40%); opacity:.5; }
+  .card.active{ filter:none; border-color:color-mix(in srgb, var(--ac) 60%, transparent);
+    box-shadow:0 26px 80px rgba(0,0,0,.6), 0 0 60px -14px var(--ac); }
+  .card .ic{ width:44px; height:44px; color:var(--ac); }
+  .card .t{ font-family:"Playfair Display",serif; font-weight:600; font-size:23px; }
+  .card .d{ color:var(--muted); font-size:13px; line-height:1.45; }
+  .card .go{ margin-top:auto; font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:var(--ac); opacity:0; transform:translateY(6px); transition:opacity .35s, transform .35s; }
+  .card.active .go{ opacity:.95; transform:none; }
+  .cv{--ac:var(--video)} .ca{--ac:var(--audio)} .cp{--ac:var(--photo)} .cc{--ac:var(--corp)} .cd{--ac:var(--dev)}
+
+  .dots{ position:relative; z-index:3; display:flex; gap:9px; justify-content:center; padding:6px 0 6px; }
+  .dots i{ width:8px; height:8px; border-radius:50%; background:rgba(255,255,255,.22); transition:background .3s, transform .3s; cursor:pointer; }
+  .dots i.on{ background:var(--ink); transform:scale(1.25); }
+  .hint{ position:relative; z-index:3; text-align:center; font-size:11px; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); padding:2px 0 10px; opacity:.8; }
+
+  footer{ position:relative; z-index:2; text-align:center; padding:14px 20px 30px; color:var(--muted); font-size:13px; }
+  footer a{ color:var(--ink); text-decoration:none; }
+
+  /* reduced-motion / fallback: plain vertical list */
+  .orbit.flat{ perspective:none; min-height:0; padding:6px 16px 10px; }
+  .orbit.flat .ring{ position:static; transform:none; width:auto; height:auto; display:flex; flex-direction:column; gap:12px; max-width:520px; margin:0 auto; }
+  .orbit.flat .card{ position:static; width:auto; height:auto; left:auto; top:auto; transform:none; filter:none; backface-visibility:visible; }
+  .orbit.flat .card .go{ opacity:.95; transform:none; }
+  @media (prefers-reduced-motion: reduce){ .ring{ transition:none; } }
+</style>
+</head>
+<body>
+<header class="bar">
+  <div class="brand">
+    <svg viewBox="0 0 48 48" aria-hidden="true"><defs><linearGradient id="fg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFD65A"/><stop offset=".5" stop-color="#FB8C3C"/><stop offset="1" stop-color="#EC1E93"/></linearGradient></defs>
+      <g fill="url(#fg)"><g transform="rotate(0 24 24)"><path d="M24 6 C27 15 27 18 24 22 C21 18 21 15 24 6Z"/></g><g transform="rotate(60 24 24)"><path d="M24 6 C27 15 27 18 24 22 C21 18 21 15 24 6Z"/></g><g transform="rotate(120 24 24)"><path d="M24 6 C27 15 27 18 24 22 C21 18 21 15 24 6Z"/></g><g transform="rotate(180 24 24)"><path d="M24 6 C27 15 27 18 24 22 C21 18 21 15 24 6Z"/></g><g transform="rotate(240 24 24)"><path d="M24 6 C27 15 27 18 24 22 C21 18 21 15 24 6Z"/></g><g transform="rotate(300 24 24)"><path d="M24 6 C27 15 27 18 24 22 C21 18 21 15 24 6Z"/></g></g>
+      <circle cx="24" cy="24" r="3.2" fill="#fff" opacity=".92"/><circle cx="24" cy="24" r="20.5" fill="none" stroke="url(#fg)" stroke-width="1.5" opacity=".7"/></svg>
+    <span class="wm">Flora</span>
+  </div>
+  <div class="lang"><b class="on">LV</b><b>RU</b><b>EN</b></div>
+</header>
+
+<div class="lede">
+  <h1>Выбери направление</h1>
+  <p>Свайпни колесо · тапни по центральной карточке, чтобы войти</p>
+</div>
+
+<div class="orbit" id="orbit">
+  <div class="ring" id="ring">
+    <a class="card cv" data-i="0" style="--i:0" href="/ru/video/">
+      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="6" width="13" height="12" rx="2"/><path d="M16 10l5-3v10l-5-3z"/></svg>
+      <div class="t">Видео</div><div class="d">Клипы, реклама, мероприятия, контент для соцсетей.</div><div class="go">Войти →</div>
+    </a>
+    <a class="card ca" data-i="1" style="--i:1" href="/ru/audio/">
+      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M4 12h2M8 8v8M12 5v14M16 8v8M20 12h0"/></svg>
+      <div class="t">Аудио</div><div class="d">Запись, сведение и мастеринг, уроки, аренда.</div><div class="go">Войти →</div>
+    </a>
+    <a class="card cp" data-i="2" style="--i:2" href="/ru/photo/">
+      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="8"/><path d="M12 4l4 7H8z" fill="currentColor" stroke="none" opacity=".9"/></svg>
+      <div class="t">Фото</div><div class="d">Свадьбы, мероприятия, реклама, портреты.</div><div class="go">Войти →</div>
+    </a>
+    <a class="card cc" data-i="3" style="--i:3" href="/ru/corporate/">
+      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+      <div class="t">Бизнесу</div><div class="d">Фото + видео сопровождение под ключ, один счёт.</div><div class="go">Войти →</div>
+    </a>
+    <a class="card cd" data-i="4" style="--i:4" href="/ru/dev/">
+      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><rect x="2" y="7" width="20" height="10" rx="5"/><path d="M7 12h3M8.5 10.5v3M15 11h.01M18 13h.01"/></svg>
+      <div class="t">Игры и приложения</div><div class="d">HTML-игры и приложения для брендов. От 2000 €.</div><div class="go">Войти →</div>
+    </a>
+  </div>
+</div>
+
+<div class="dots" id="dots"></div>
+<div class="hint">← свайп · колёсико · стрелки →</div>
+
+<footer>+371 27 775 842 · <a href="mailto:info@florasoundrecords.lv">info@florasoundrecords.lv</a> · Rīga</footer>
+
+<script>
+(function(){
+  var N = 5, STEP = 360/N;
+  var orbit = document.getElementById('orbit');
+  var ring = document.getElementById('ring');
+  var cards = Array.prototype.slice.call(ring.querySelectorAll('.card'));
+  var dotsWrap = document.getElementById('dots');
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if(reduce){ orbit.classList.add('flat'); cards.forEach(function(c){ c.classList.add('active'); }); return; }
+
+  // responsive card size + radius
+  function sizeRing(){
+    var vw = Math.min(window.innerWidth, 900);
+    var cw = Math.max(160, Math.min(230, vw*0.52));
+    var R = Math.round(cw*1.5);
+    cards.forEach(function(c){ c.style.setProperty('--cw', cw+'px'); c.style.setProperty('--R', R+'px'); });
+  }
+  sizeRing(); window.addEventListener('resize', sizeRing);
+
+  var index = 0, rot = 0;
+  function setRot(deg, anim){ ring.classList.toggle('drag', !anim); ring.style.setProperty('--rot', deg+'deg'); }
+  function update(anim){
+    rot = -index*STEP;
+    setRot(rot, anim!==false);
+    cards.forEach(function(c,i){ c.classList.toggle('active', i===index); });
+    Array.prototype.forEach.call(dotsWrap.children, function(d,i){ d.classList.toggle('on', i===index); });
+  }
+  function go(i){ index = ((i % N) + N) % N; update(true); }
+
+  // dots
+  for(var i=0;i<N;i++){ (function(i){ var d=document.createElement('i'); d.addEventListener('click', function(){ go(i); }); dotsWrap.appendChild(d); })(i); }
+  update(false);
+
+  // drag (finger-glued, snap on release)
+  var dragging=false, startX=0, baseRot=0, moved=0;
+  orbit.addEventListener('pointerdown', function(e){ dragging=true; startX=e.clientX; baseRot=rot; moved=0; ring.classList.add('drag'); try{orbit.setPointerCapture(e.pointerId);}catch(_){}} );
+  orbit.addEventListener('pointermove', function(e){ if(!dragging) return; var dx=e.clientX-startX; moved=Math.max(moved,Math.abs(dx)); rot = baseRot + dx*0.35; ring.style.setProperty('--rot', rot+'deg'); });
+  function endDrag(){ if(!dragging) return; dragging=false; index = Math.round(-rot/STEP); update(true); }
+  orbit.addEventListener('pointerup', endDrag); orbit.addEventListener('pointercancel', endDrag);
+
+  // wheel
+  var wlock=false;
+  orbit.addEventListener('wheel', function(e){ e.preventDefault(); if(wlock) return; wlock=true; setTimeout(function(){wlock=false;},220); go(index + (e.deltaY>0?1:-1)); }, {passive:false});
+
+  // keyboard
+  window.addEventListener('keydown', function(e){ if(e.key==='ArrowRight') go(index+1); else if(e.key==='ArrowLeft') go(index-1); });
+
+  // click: active card navigates; side card snaps to front
+  cards.forEach(function(c){ c.addEventListener('click', function(e){
+    if(moved>6){ e.preventDefault(); return; }
+    var i = parseInt(c.getAttribute('data-i'),10);
+    if(i!==index){ e.preventDefault(); go(i); }
+  }); });
+
+  // lang switcher mock
+  document.querySelectorAll('.lang b').forEach(function(b){ b.addEventListener('click', function(){ document.querySelectorAll('.lang b').forEach(function(x){ x.classList.toggle('on', x===b); }); }); });
+})();
+</script>
+</body>
+</html>
