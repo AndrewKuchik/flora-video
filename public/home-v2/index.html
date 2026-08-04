@@ -94,7 +94,7 @@
   for(var i2=0;i2<M;i2++){ var an=Math.random()*6.283; DIR[i2*2]=Math.cos(an); DIR[i2*2+1]=Math.sin(an); BR[i2]=0.45+Math.random()*0.55; RND[i2]=Math.random(); }
 
   // ---- webgl ----
-  var VS='attribute vec2 p;attribute float b;uniform float uSize,uAspect;varying float vb;void main(){vb=b;gl_Position=vec4(p.x*uAspect,p.y,0.0,1.0);gl_PointSize=uSize*(0.5+0.8*b);}';
+  var VS='attribute vec2 p;attribute float b;uniform float uSize,uSX,uSY;varying float vb;void main(){vb=b;gl_Position=vec4(p.x*uSX,p.y*uSY,0.0,1.0);gl_PointSize=uSize*(0.5+0.8*b);}';
   var FS='precision mediump float;uniform vec3 uC;uniform float uA;varying float vb;void main(){float d=length(gl_PointCoord-0.5);if(d>0.5)discard;float a=smoothstep(0.5,0.0,d);gl_FragColor=vec4(uC*(0.7+0.5*vb),a*uA);}';
   function mk(t,src){ var sh=gl.createShader(t); gl.shaderSource(sh,src); gl.compileShader(sh); if(!gl.getShaderParameter(sh,gl.COMPILE_STATUS)) console.error('shader',gl.getShaderInfoLog(sh)); return sh; }
   var pr=gl.createProgram(); gl.attachShader(pr,mk(gl.VERTEX_SHADER,VS)); gl.attachShader(pr,mk(gl.FRAGMENT_SHADER,FS)); gl.linkProgram(pr);
@@ -106,7 +106,7 @@
   var bb=gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER,bb); gl.bufferData(gl.ARRAY_BUFFER,BR,gl.STATIC_DRAW);
   var lb=gl.getAttribLocation(pr,'b'); gl.enableVertexAttribArray(lb); gl.vertexAttribPointer(lb,1,gl.FLOAT,false,0,0);
   gl.enable(gl.BLEND); gl.blendFunc(gl.SRC_ALPHA,gl.ONE); gl.clearColor(0,0,0,0);
-  var uSize=gl.getUniformLocation(pr,'uSize'),uAspect=gl.getUniformLocation(pr,'uAspect'),uC=gl.getUniformLocation(pr,'uC'),uA=gl.getUniformLocation(pr,'uA');
+  var uSize=gl.getUniformLocation(pr,'uSize'),uSX=gl.getUniformLocation(pr,'uSX'),uSY=gl.getUniformLocation(pr,'uSY'),uC=gl.getUniformLocation(pr,'uC'),uA=gl.getUniformLocation(pr,'uA');
 
   var tmx=0,tmy=0,mx=0,my=0;
   window.addEventListener('pointermove',function(e){tmx=e.clientX/window.innerWidth*2-1;tmy=-(e.clientY/window.innerHeight*2-1);});
@@ -144,10 +144,10 @@
     gl.bindBuffer(gl.ARRAY_BUFFER,pb); gl.bufferSubData(gl.ARRAY_BUFFER,0,pos);
     gl.clear(gl.COLOR_BUFFER_BIT);
     var acr=Math.round(AC[a][0]+(AC[b][0]-AC[a][0])*mt), acg=Math.round(AC[a][1]+(AC[b][1]-AC[a][1])*mt), acb=Math.round(AC[a][2]+(AC[b][2]-AC[a][2])*mt);
-    gl.uniform1f(uSize, Math.min(W,H)*(mobile?0.0036:0.0032));
-    gl.uniform1f(uAspect, H/W);
+    gl.uniform1f(uSize, Math.min(W,H)*(mobile?0.011:0.009));
+    var fit=0.82; gl.uniform1f(uSX, fit*Math.min(1,H/W)); gl.uniform1f(uSY, fit*Math.min(1,W/H));
     gl.uniform3f(uC, acr/255, acg/255, acb/255);
-    gl.uniform1f(uA, 0.52*(1-0.35*sc));
+    gl.uniform1f(uA, 0.85*(1-0.3*sc));
     gl.drawArrays(gl.POINTS,0,M);
     var accS=acr+','+acg+','+acb; if(accS!==last){ root.style.setProperty('--ac',accS); last=accS; }
     var cur=Math.round(s); for(var k=0;k<nav.length;k++) nav[k].classList.toggle('on',(k+1)===cur);
