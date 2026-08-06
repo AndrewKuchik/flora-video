@@ -9,7 +9,7 @@
 <style>
   :root{ --bg:#07070b; --ink:#EDE7DF; --muted:#948d84; --ac:255,198,75; }
   *{box-sizing:border-box}
-  html{scroll-behavior:smooth; scroll-snap-type:y mandatory}
+  html{scroll-behavior:smooth; scroll-snap-type:y proximity}
   body{ margin:0; background:var(--bg); color:var(--ink); font-family:"Manrope",system-ui,-apple-system,sans-serif; -webkit-tap-highlight-color:transparent; }
   .tint{ position:fixed; inset:0; z-index:0; pointer-events:none; transition:background .3s linear;
     background:radial-gradient(60% 52% at 50% 42%, rgba(var(--ac),.14), transparent 70%); }
@@ -25,7 +25,7 @@
   nav.sec a.on{ color:var(--ink); background:rgba(var(--ac),.18); }
   .lang{ display:flex; gap:1px; } .lang b{ font-weight:600; font-size:11px; padding:5px 6px; border-radius:999px; color:var(--muted); cursor:pointer; } .lang b.on{ color:var(--ink); }
   main{ position:relative; z-index:2; }
-  .st{ height:100svh; scroll-snap-align:center; scroll-snap-stop:always; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; text-align:center; padding:0 22px calc(13svh + env(safe-area-inset-bottom)); }
+  .st{ height:100svh; scroll-snap-align:center; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; text-align:center; padding:0 22px calc(13svh + env(safe-area-inset-bottom)); }
   .st .eyebrow{ font-size:11px; letter-spacing:.22em; text-transform:uppercase; color:rgb(var(--ac)); margin:0 0 8px; }
   .st .word{ font-family:"Playfair Display",Georgia,serif; font-weight:600; margin:0; line-height:1.02; text-wrap:balance; font-size:clamp(30px,7.5vw,60px); text-shadow:0 4px 50px rgba(0,0,0,.65); }
   .st .sub{ color:var(--ink); opacity:.8; font-size:clamp(13px,3.4vw,16px); margin:.7em 0 0; max-width:32ch; }
@@ -34,12 +34,36 @@
   footer.foot{ position:relative; z-index:2; text-align:center; padding:16px 20px 30px; color:var(--muted); font-size:13px; } footer.foot a{ color:var(--ink); text-decoration:none; }
   .scrollhint{ position:fixed; z-index:4; left:0; right:0; bottom:calc(16px + env(safe-area-inset-bottom)); text-align:center; font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:var(--muted); animation:bob 2.4s ease-in-out infinite; }
   @keyframes bob{ 0%,100%{transform:translateY(0);opacity:.5} 50%{transform:translateY(6px);opacity:1} }
-  @media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto} .scrollhint{animation:none} }
+  .halo{ position:fixed; z-index:0; left:50%; top:50%; width:80vmin; height:80vmin; transform:translate(-50%,-50%); pointer-events:none;
+    background:radial-gradient(circle, rgba(var(--ac),.26), rgba(var(--ac),.07) 44%, transparent 68%); filter:blur(4px);
+    animation:halo 4.6s ease-in-out infinite; will-change:transform,opacity; }
+  @keyframes halo{ 0%,100%{ transform:translate(-50%,-50%) scale(1); opacity:.8 } 50%{ transform:translate(-50%,-50%) scale(1.09); opacity:1 } }
+  .orbit{ position:fixed; inset:0; z-index:3; display:grid; place-items:center; pointer-events:none; will-change:opacity; }
+  .orbit .ring{ position:relative; width:0; height:0; --R:min(37vw,29vh); animation:spin 46s linear infinite; }
+  .orbit .sat{ position:absolute; left:0; top:0; transform:rotate(calc(var(--i)*72deg)) translateY(calc(var(--R)*-1)) rotate(calc(var(--i)*-72deg)); pointer-events:auto; text-decoration:none; }
+  .orbit .card{ display:flex; flex-direction:column; align-items:center; gap:6px; transform:translate(-50%,-50%) rotate(0deg); animation:spinrev 46s linear infinite; }
+  .orbit .ic{ width:36px; height:36px; display:grid; place-items:center; border-radius:50%; color:rgb(var(--sc)); background:rgba(12,12,18,.35); border:1px solid rgba(var(--sc),.55); box-shadow:0 0 20px -5px rgba(var(--sc),.75); transition:transform .22s, box-shadow .22s; }
+  .orbit .ic svg{ width:19px; height:19px; }
+  .orbit .lb{ font-size:10px; font-weight:600; letter-spacing:.06em; color:var(--ink); opacity:.85; white-space:nowrap; text-shadow:0 2px 10px rgba(0,0,0,.7); }
+  .orbit .sat:hover .ic, .orbit .sat:focus-visible .ic{ transform:scale(1.16); box-shadow:0 0 30px -3px rgba(var(--sc),.95); }
+  @keyframes spin{ to{ transform:rotate(360deg) } }
+  @keyframes spinrev{ from{ transform:translate(-50%,-50%) rotate(0deg) } to{ transform:translate(-50%,-50%) rotate(-360deg) } }
+  @media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto} .scrollhint{animation:none} .halo{animation:none} .orbit .ring,.orbit .card{animation:none} }
 </style>
 </head>
 <body>
 <div class="tint"></div>
+<div class="halo" id="halo"></div>
 <canvas id="c"></canvas>
+<div class="orbit" id="orbit" aria-label="Разделы студии">
+  <div class="ring">
+    <a class="sat" style="--i:0;--sc:227,170,82" href="#s1"><span class="card"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"><rect x="3" y="5" width="18" height="14" rx="4"/><path d="M10 9l5 3-5 3z" fill="currentColor" stroke="none"/></svg></span><span class="lb">Видео</span></span></a>
+    <a class="sat" style="--i:1;--sc:94,139,255" href="#s2"><span class="card"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 10v4M9.5 7v10M14.5 5v14M19 9v6"/></svg></span><span class="lb">Аудио</span></span></a>
+    <a class="sat" style="--i:2;--sc:227,154,165" href="#s3"><span class="card"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="3" y="7" width="18" height="12" rx="3"/><path d="M8 7l1.6-2.5h4.8L16 7"/><circle cx="12" cy="13" r="3"/></svg></span><span class="lb">Фото</span></span></a>
+    <a class="sat" style="--i:3;--sc:216,178,122" href="#s4"><span class="card"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="3" y="8" width="18" height="11" rx="2"/><path d="M8.5 8V6.5A1.5 1.5 0 0 1 10 5h4a1.5 1.5 0 0 1 1.5 1.5V8"/></svg></span><span class="lb">Бизнесу</span></span></a>
+    <a class="sat" style="--i:4;--sc:167,139,250" href="#s5"><span class="card"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"><rect x="2.5" y="7.5" width="19" height="9" rx="4.5"/><path d="M7 10.5v3M5.5 12h3"/><circle cx="16" cy="11.5" r="1.1" fill="currentColor" stroke="none"/><circle cx="18.2" cy="13.5" r="1.1" fill="currentColor" stroke="none"/></svg></span><span class="lb">Игры</span></span></a>
+  </div>
+</div>
 <div class="grain"></div>
 <header class="bar">
   <a class="brand" href="#s0"><svg viewBox="0 0 48 48" aria-hidden="true"><defs><linearGradient id="fg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFD65A"/><stop offset=".5" stop-color="#FB8C3C"/><stop offset="1" stop-color="#EC1E93"/></linearGradient></defs><g fill="url(#fg)"><g transform="rotate(0 24 24)"><path d="M24 6 C27 15 27 18 24 22 C21 18 21 15 24 6Z"/></g><g transform="rotate(60 24 24)"><path d="M24 6 C27 15 27 18 24 22 C21 18 21 15 24 6Z"/></g><g transform="rotate(120 24 24)"><path d="M24 6 C27 15 27 18 24 22 C21 18 21 15 24 6Z"/></g><g transform="rotate(180 24 24)"><path d="M24 6 C27 15 27 18 24 22 C21 18 21 15 24 6Z"/></g><g transform="rotate(240 24 24)"><path d="M24 6 C27 15 27 18 24 22 C21 18 21 15 24 6Z"/></g><g transform="rotate(300 24 24)"><path d="M24 6 C27 15 27 18 24 22 C21 18 21 15 24 6Z"/></g></g><circle cx="24" cy="24" r="3.2" fill="#fff" opacity=".92"/><circle cx="24" cy="24" r="20.5" fill="none" stroke="url(#fg)" stroke-width="1.5" opacity=".7"/></svg><span class="wm">Flora</span></a>
@@ -90,12 +114,12 @@
     for(var j=0;j<ne;j++){ var e=ed[j%ed.length]; out[(nf+j)*2]=e[0]; out[(nf+j)*2+1]=e[1]; } return out; }
   var SHAPES=[]; for(var s=0;s<6;s++){ SHAPES.push(fit(fillPts(s),edgePts(s))); }
 
-  var DIR=new Float32Array(M*2), BR=new Float32Array(M), RND=new Float32Array(M);
-  for(var i2=0;i2<M;i2++){ var an=Math.random()*6.283; DIR[i2*2]=Math.cos(an); DIR[i2*2+1]=Math.sin(an); BR[i2]=0.45+Math.random()*0.55; RND[i2]=Math.random(); }
+  var DIR=new Float32Array(M*2), BR=new Float32Array(M), RND=new Float32Array(M), Z0=new Float32Array(M);
+  for(var i2=0;i2<M;i2++){ var an=Math.random()*6.283; DIR[i2*2]=Math.cos(an); DIR[i2*2+1]=Math.sin(an); BR[i2]=0.45+Math.random()*0.55; RND[i2]=Math.random(); Z0[i2]=(Math.random()-0.5)*0.26; }
 
   // ---- webgl ----
-  var VS='attribute vec2 p;attribute float b;uniform float uSize,uSX,uSY;varying float vb;void main(){vb=b;gl_Position=vec4(p.x*uSX,p.y*uSY,0.0,1.0);gl_PointSize=uSize*(0.5+0.8*b);}';
-  var FS='precision mediump float;uniform vec3 uC;uniform float uA;varying float vb;void main(){float d=length(gl_PointCoord-0.5);if(d>0.5)discard;float a=smoothstep(0.5,0.0,d);gl_FragColor=vec4(uC*(0.7+0.5*vb),a*uA);}';
+  var VS='attribute vec2 p;attribute float b;attribute float d;uniform float uSize,uSX,uSY;varying float vb;varying float vd;void main(){vb=b;vd=d;gl_Position=vec4(p.x*uSX,p.y*uSY,0.0,1.0);gl_PointSize=uSize*(0.5+0.8*b)*d;}';
+  var FS='precision mediump float;uniform vec3 uC;uniform float uA;varying float vb;varying float vd;void main(){float r=length(gl_PointCoord-0.5);if(r>0.5)discard;float a=smoothstep(0.5,0.0,r);gl_FragColor=vec4(uC*(0.55+0.6*vb*vd),a*uA*(0.55+0.5*vd));}';
   function mk(t,src){ var sh=gl.createShader(t); gl.shaderSource(sh,src); gl.compileShader(sh); if(!gl.getShaderParameter(sh,gl.COMPILE_STATUS)) console.error('shader',gl.getShaderInfoLog(sh)); return sh; }
   var pr=gl.createProgram(); gl.attachShader(pr,mk(gl.VERTEX_SHADER,VS)); gl.attachShader(pr,mk(gl.FRAGMENT_SHADER,FS)); gl.linkProgram(pr);
   if(!gl.getProgramParameter(pr,gl.LINK_STATUS)) console.error('link',gl.getProgramInfoLog(pr));
@@ -105,6 +129,9 @@
   var lp=gl.getAttribLocation(pr,'p'); gl.enableVertexAttribArray(lp); gl.vertexAttribPointer(lp,2,gl.FLOAT,false,0,0);
   var bb=gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER,bb); gl.bufferData(gl.ARRAY_BUFFER,BR,gl.STATIC_DRAW);
   var lb=gl.getAttribLocation(pr,'b'); gl.enableVertexAttribArray(lb); gl.vertexAttribPointer(lb,1,gl.FLOAT,false,0,0);
+  var dyn=new Float32Array(M); for(var id=0;id<M;id++) dyn[id]=1;
+  var db=gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER,db); gl.bufferData(gl.ARRAY_BUFFER,dyn,gl.DYNAMIC_DRAW);
+  var ld=gl.getAttribLocation(pr,'d'); gl.enableVertexAttribArray(ld); gl.vertexAttribPointer(ld,1,gl.FLOAT,false,0,0);
   gl.enable(gl.BLEND); gl.blendFunc(gl.SRC_ALPHA,gl.ONE); gl.clearColor(0,0,0,0);
   var uSize=gl.getUniformLocation(pr,'uSize'),uSX=gl.getUniformLocation(pr,'uSX'),uSY=gl.getUniformLocation(pr,'uSY'),uC=gl.getUniformLocation(pr,'uC'),uA=gl.getUniformLocation(pr,'uA');
 
@@ -123,7 +150,7 @@
   }
   function ramp(f){ return f<0.5?0.5*Math.pow(f*2,3):1-0.5*Math.pow((1-f)*2,3); }
 
-  var nav=document.getElementById('nav').querySelectorAll('a'), root=document.documentElement, hint=document.getElementById('hint'), last='';
+  var nav=document.getElementById('nav').querySelectorAll('a'), root=document.documentElement, hint=document.getElementById('hint'), orbit=document.getElementById('orbit'), last='';
   document.querySelectorAll('.lang b').forEach(function(b){ b.addEventListener('click',function(){ document.querySelectorAll('.lang b').forEach(function(x){ x.classList.toggle('on',x===b); }); }); });
 
   var running=true; document.addEventListener('visibilitychange',function(){ running=!document.hidden; if(running) requestAnimationFrame(loop); });
@@ -134,24 +161,34 @@
     if(canvas.width!==W||canvas.height!==H){ canvas.width=W; canvas.height=H; gl.viewport(0,0,W,H); }
     var s=Math.max(0,Math.min(N-1,y/vh)), a=Math.floor(s), b=Math.min(N-1,a+1), f=s-a;
     var mt=reduce?(f<0.5?0:1):ramp(f), sc=reduce?0:Math.sin(Math.PI*f), t=(now||0)*0.001;
-    var A=SHAPES[a],B=SHAPES[b], breathe=1+0.02*Math.sin(t*1.1)*(1-sc);
-    mx+=(tmx-mx)*0.05; my+=(tmy-my)*0.05;
+    var A=SHAPES[a],B=SHAPES[b], breathe=1+0.025*Math.sin(t*1.1)*(1-sc);
+    mx+=(tmx-mx)*0.06; my+=(tmy-my)*0.06;
+    var wob=reduce?0:(1-0.6*sc);
+    var rot=(0.30*Math.sin(t*0.35))*wob + mx*0.30, tilt=(0.10*Math.sin(t*0.52))*wob + my*0.18;
+    var cR=Math.cos(rot),sR=Math.sin(rot),cT=Math.cos(tilt),sT=Math.sin(tilt), focal=2.4;
     for(var i=0;i<M;i++){ var ix=i*2,iy=ix+1;
       var x=(A[ix]+(B[ix]-A[ix])*mt)*breathe, yy=(A[iy]+(B[iy]-A[iy])*mt)*breathe;
-      var fo=field(a,x,yy,i,sc);
-      pos[ix]=x+fo[0]+mx*0.05; pos[iy]=yy+fo[1]+my*0.05;
+      var fo=field(a,x,yy,i,sc); x+=fo[0]; yy+=fo[1];
+      var z0=Z0[i];
+      var rx=x*cR+z0*sR, rz=-x*sR+z0*cR;
+      var ry=yy*cT-rz*sT, rz2=yy*sT+rz*cT;
+      var persp=focal/(focal-rz2);
+      pos[ix]=rx*persp; pos[iy]=ry*persp;
+      dyn[i]=persp*(reduce?1:(0.82+0.18*Math.sin(t*2.4+RND[i]*6.283)));
     }
     gl.bindBuffer(gl.ARRAY_BUFFER,pb); gl.bufferSubData(gl.ARRAY_BUFFER,0,pos);
+    gl.bindBuffer(gl.ARRAY_BUFFER,db); gl.bufferSubData(gl.ARRAY_BUFFER,0,dyn);
     gl.clear(gl.COLOR_BUFFER_BIT);
     var acr=Math.round(AC[a][0]+(AC[b][0]-AC[a][0])*mt), acg=Math.round(AC[a][1]+(AC[b][1]-AC[a][1])*mt), acb=Math.round(AC[a][2]+(AC[b][2]-AC[a][2])*mt);
     gl.uniform1f(uSize, Math.min(W,H)*(mobile?0.011:0.009));
     var fit=0.82; gl.uniform1f(uSX, fit*Math.min(1,H/W)); gl.uniform1f(uSY, fit*Math.min(1,W/H));
     gl.uniform3f(uC, acr/255, acg/255, acb/255);
-    gl.uniform1f(uA, 0.85*(1-0.3*sc));
+    gl.uniform1f(uA, (0.85*(1-0.3*sc))*(reduce?1:(0.94+0.06*Math.sin(t*1.3))));
     gl.drawArrays(gl.POINTS,0,M);
     var accS=acr+','+acg+','+acb; if(accS!==last){ root.style.setProperty('--ac',accS); last=accS; }
     var cur=Math.round(s); for(var k=0;k<nav.length;k++) nav[k].classList.toggle('on',(k+1)===cur);
     hint.style.opacity=s>0.4?'0':'';
+    if(orbit){ var oo=Math.max(0,1-s*2.2); orbit.style.opacity=oo; orbit.style.visibility=oo<0.04?'hidden':'visible'; }
   }
   function loop(now){ if(!running) return; frame(now); requestAnimationFrame(loop); }
   requestAnimationFrame(loop);
