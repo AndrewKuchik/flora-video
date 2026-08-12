@@ -3,17 +3,17 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Flora — мир + пролёт камеры</title>
+<title>Flora — мир · монохром</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;600;700&family=Onest:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-  :root{ --bg:#0A0907; --ink:#EDE7DA; --dim:#847c6f; --gold:233,182,84; }
+  :root{ --bg:#070707; --ink:#EDECE7; --dim:#7c7c78; --gold:234,231,223; }
   *{box-sizing:border-box}
   body{ margin:0; background:var(--bg); color:var(--ink); font-family:"Onest",system-ui,sans-serif; -webkit-tap-highlight-color:transparent; }
   .spacer{ height:720vh; }
   #app{ position:fixed; inset:0; z-index:1; }
   #app canvas{ display:block; }
-  .vig{ position:fixed; inset:0; z-index:2; pointer-events:none; background:radial-gradient(130% 100% at 50% 42%, transparent 46%, rgba(0,0,0,.5)); }
+  .vig{ position:fixed; inset:0; z-index:2; pointer-events:none; background:radial-gradient(130% 100% at 50% 42%, transparent 46%, rgba(0,0,0,.55)); }
   .grain{ position:fixed; inset:0; z-index:5; pointer-events:none; opacity:.05; mix-blend-mode:overlay;
     background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
   .mono{ font-family:"JetBrains Mono",monospace; font-weight:400; letter-spacing:.16em; text-transform:uppercase; }
@@ -50,13 +50,13 @@
 <div class="prog"><i id="progbar"></i></div>
 <div class="spacer"></div>
 
-<script>window.FLORA_THEME='a';</script>
+<script>window.FLORA_THEME='b';</script>
 <script type="importmap">
 { "imports": {
   "three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
   "three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
 } }
 </script>
-<script type="module">import './engine.js';</script>
+<script type="module">import '../c-world/engine.js';</script>
 </body>
 </html>
